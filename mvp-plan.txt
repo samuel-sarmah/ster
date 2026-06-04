@@ -1,0 +1,142 @@
+CLIPSTER BENCHMARK SUMMARY
+
+Metric - Clipster
+Views generated - 141.9B+
+Paid out to creators - $6.5M+
+Registered creators - 140K+
+Campaigns processed - 1,600+
+Team size - ~20 (9 engineers)
+Business model - Platform fee (revenue share on CPM)
+
+Core model: Brands deposit budget upfront (escrow). Creators opt in to campaigns, post on TikTok/Instagram/YouTube/X, submit links. Clipster verifies views via platform APIs, and creators earn based on verified CPM. No flat fees. Pure performance-based payouts.
+
+---
+
+RECOMMENDED TECH STACK FOR MVP
+
+Layer - Choice - Why
+Frontend - Next.js 14 (App Router) + Tailwind - Fast dev, SSR for SEO, one codebase
+Backend - Node.js/TypeScript - Unified language, fast iteration
+Database - PostgreSQL via Supabase - Auth, RLS, real-time subscriptions built-in
+Queue/Workers - BullMQ or Inngest - Async view verification, payout processing
+Payments - Stripe Connect - Escrow, automated payouts, 50+ countries
+Social APIs - TikTok, Instagram Graph API, YouTube Data API, X API - View verification
+Hosting - Vercel + Railway (workers) - Scalable, minimal ops
+File storage - Supabase Storage / Cloudflare R2 - Campaign assets
+
+---
+
+MVP FEATURE BREAKDOWN (V1)
+
+Phase 1: Core Infrastructure (Weeks 1-2)
+
+User System & Auth
+- Email/Google sign-up for both creators and brands
+- Role-based access (creator / brand / admin)
+- Profile management (brand info, creator social links)
+- Stripe Connect onboarding (express accounts for payouts)
+
+Admin Panel (basic)
+- User management (approve/suspend)
+- Campaign moderation queue
+- Basic fraud flagging (manual)
+- Payout oversight
+
+Phase 2: Brand & Campaign Core (Weeks 3-4)
+
+Brand Dashboard
+- Campaign creation wizard with: name, description, brief/guidelines, target CPM, total budget, supported platforms (TikTok, Instagram, YouTube, X), content requirements
+- Campaign list with status (draft / active / paused / completed / archived)
+- Budget deposit via Stripe (escrow)
+- Real-time campaign performance dashboard showing total verified views, spend vs budget, creator submissions, effective CPM
+
+Escrow System
+- Brand deposits full budget upfront into platform-held escrow
+- Funds released to creators based on verified view milestones
+- Unused budget refunded on campaign close
+- Stripe Connect handles the flow
+
+Phase 3: Creator Workflow (Weeks 5-6)
+
+Creator Onboarding
+- Social account linking (OAuth with TikTok, Instagram, YouTube, X)
+- Profile creation (niche, audience size, past work)
+- Stripe Connect payout account setup
+
+Campaign Discovery
+- Browse active campaigns with filters (platform, payout, niche)
+- Campaign detail page (brief, CPM, requirements)
+- Apply to / opt into campaigns
+
+Content Submission
+- Submit post URL from linked social platform
+- Automatic view tracking begins on approval
+- Submission status tracking (pending review > approved > tracking > paid)
+
+Creator Dashboard
+- Active campaigns
+- Earnings overview (pending, confirmed, paid out)
+- Per-campaign performance (views generated, earnings)
+- Payout history
+
+Phase 4: Tracking & Payments (Weeks 7-8)
+
+View Tracking Engine
+- Scheduled workers fetch view counts from platform APIs: TikTok video analytics API, Instagram Graph API media insights, YouTube Data API v3, X Twitter API v2 engagement metrics
+- Configurable polling interval (e.g., every 6 hours)
+- View deduplication and verification logic
+- Fraud detection heuristics (velocity checks, bot pattern detection)
+
+Payout Logic
+- Earnings = (verified views / 1000) x campaign CPM
+- Payout threshold: configurable (e.g., $10 minimum)
+- Auto-payout on schedule (weekly / campaign-end)
+- Stripe Connect transfers to creator bank accounts
+- Transaction records and receipts
+
+Moderation System
+- Admin reviews submissions for policy compliance
+- Content flagging (policy violations, spam, off-brief)
+- View adjustment capability (admin can correct view counts)
+- Dispute handling workflow
+
+---
+
+OUT OF SCOPE FOR V1 (Post-MVP)
+
+- AI-powered creator matching
+- Mobile app (iOS/Android)
+- Referral/affiliate program
+- Automated content clipping/editing
+- Multi-currency support
+- Advanced analytics (engagement scoring, audience demographics)
+- Real-time chat/messaging
+- API for third-party integrations
+- Advanced fraud detection (ML-based)
+
+---
+
+
+
+KEY RISK FACTORS AND MITIGATIONS
+
+Risk: Social API rate limits / changes
+Mitigation: Build abstraction layer, cache aggressively, have manual verification fallback
+
+Risk: Stripe Connect compliance (KYC, tax forms)
+Mitigation: Use Stripe Express accounts, they handle most compliance
+
+Risk: View fraud / bot traffic
+Mitigation: Start with manual admin review + velocity heuristics, add ML later
+
+Risk: Platform TOS restricting view-based payouts
+Mitigation: Review TOS carefully, have a submission-approved model as backup
+
+Risk: Escrow cash flow management
+Mitigation: Separate operating account, clear refund terms in TOS
+
+---
+
+BOTTOM LINE V1 SCOPE
+
+~6 core workflows: creator signup, link socials, browse campaigns, submit content, views tracked, get paid. ~3 brand workflows: create campaign, deposit escrow, view performance. And an admin moderation panel. Avoid AI features, mobile apps, and complex analytics in V1. Launch with 10-20 beta campaigns and iterate.
