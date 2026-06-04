@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -81,8 +82,10 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex items-center justify-between px-6 py-4 border-b">
-        <span className="font-semibold">Sterclip</span>
+      <header className="flex items-center justify-between px-4 py-4 border-b sm:px-6">
+        <Link href="/" className="font-semibold tracking-tight hover:text-primary transition-colors">
+          Sterclip
+        </Link>
         <button
           onClick={handleLogout}
           className="text-sm text-muted-foreground hover:text-foreground underline"
@@ -91,7 +94,7 @@ export default function OnboardingPage() {
         </button>
       </header>
 
-      <main className="flex flex-1 items-center justify-center p-6">
+      <main className="flex flex-1 items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-md">
           <Card>
             <CardHeader>
