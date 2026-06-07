@@ -164,22 +164,25 @@ const Testimonial8 = (props: Props) => {
   const list = testimonials.slice(0, 9);
 
   return (
-    <section className={cn("section-padding", className)}>
+    <section className={cn("section-padding border-t border-border/60", className)}>
       <div className="container">
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="max-w-3xl text-center text-balance text-3xl font-bold tracking-[-0.02em] lg:text-5xl">
+        <div className="flex flex-col items-start gap-3 md:items-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Testimonials
+          </p>
+          <h2 className="max-w-3xl text-balance text-3xl font-extrabold tracking-[-0.02em] md:text-center lg:text-5xl">
             {heading}
           </h2>
-          <p className="max-w-2xl text-center text-muted-foreground lg:text-lg lg:leading-8">{description}</p>
+          <p className="max-w-2xl text-muted-foreground md:text-center lg:text-lg lg:leading-8">{description}</p>
         </div>
-        <div className="relative mt-14 w-full">
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="relative mt-12 w-full">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {list.map((testimonial, idx) => {
               return (
                 <div key={testimonial.id ?? idx}>
-                  <Card className="h-full border-border/80 bg-card/90 p-5 backdrop-blur-sm">
+                  <Card className="h-full border-border/60 bg-card p-5">
                     <div className="flex gap-4 leading-5">
-                      <Avatar className="size-10 rounded-full ring-1 ring-primary/25">
+                      <Avatar className="size-10 rounded-full ring-1 ring-border">
                         <AvatarImage
                           src={testimonial.avatar}
                           alt={testimonial.name}

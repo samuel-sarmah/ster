@@ -1,4 +1,5 @@
 import { Hero195, type PixabayVideo } from "@/components/hero195";
+import { BrandShowcase } from "@/components/brand-showcase";
 import { Pricing11 } from "@/components/pricing11";
 import { Testimonial8 } from "@/components/testimonial8";
 import { Contact2 } from "@/components/contact2";
@@ -8,7 +9,7 @@ async function getCreatorVideos(): Promise<PixabayVideo[]> {
   if (!key) return [];
   try {
     const res = await fetch(
-      `https://pixabay.com/api/videos/?key=${key}&q=content+creator&per_page=20&video_type=all`,
+      `https://pixabay.com/api/videos/?key=${key}&q=brand+marketing+lifestyle&per_page=12&video_type=all`,
       { next: { revalidate: 86400 } }
     );
     if (!res.ok) return [];
@@ -85,46 +86,15 @@ export default async function Home() {
         />
       </section>
 
-      {creatorVideos.length > 0 && (
-        <section id="gallery" className="scroll-mt-24 section-padding">
-          <div className="container mx-auto">
-            <div className="mb-10">
-              <h2 className="text-3xl font-bold tracking-[-0.02em] md:text-4xl lg:text-5xl">
-                Creator content in the wild
-              </h2>
-              <p className="mt-3 max-w-2xl text-muted-foreground lg:text-lg lg:leading-8">
-                Real creator videos from across the community, powered by Pixabay.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-              {creatorVideos.slice(0, 16).map((video) => (
-                <div
-                  key={video.id}
-                  className="relative aspect-video overflow-hidden rounded-xl border border-border/70 bg-muted shadow-[var(--shadow-soft)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-soft-hover)]"
-                >
-                  <video
-                    src={video.videos.small?.url || video.videos.medium?.url || video.videos.tiny?.url}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-            <p className="mt-6 text-center text-xs text-muted-foreground">
-              Videos via Pixabay
-            </p>
-          </div>
-        </section>
-      )}
+      <section id="gallery" className="scroll-mt-20">
+        <BrandShowcase videos={creatorVideos} />
+      </section>
 
-      <section id="pricing" className="scroll-mt-24">
+      <section id="pricing" className="scroll-mt-20">
         <Pricing11 className="animate-fade-up" />
       </section>
 
-      <section id="testimonials" className="scroll-mt-24">
+      <section id="testimonials" className="scroll-mt-20">
         <Testimonial8
           className="animate-fade-up"
           heading="Trusted by brand and creator operations teams"
@@ -133,7 +103,7 @@ export default async function Home() {
         />
       </section>
 
-      <section id="contact" className="scroll-mt-24">
+      <section id="contact" className="scroll-mt-20">
         <Contact2
           className="animate-fade-up"
           title="Plan your rollout with the Sterclip team"

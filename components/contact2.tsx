@@ -119,7 +119,7 @@ const Contact2 = (props: Props) => {
   };
 
   return (
-    <section className={cn("section-padding", className)}>
+    <section className={cn("section-padding border-t border-border/60", className)}>
       <div className="container mx-auto">
         <div className="flex flex-col gap-16 lg:flex-row lg:gap-24">
           <div className="flex flex-1 flex-col gap-10">
