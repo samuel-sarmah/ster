@@ -34,30 +34,30 @@ const Hero195 = ({
   className,
 }: Hero195Props) => {
   return (
-    <section className={cn("relative overflow-hidden border-b border-border/60", className)}>
-      <div className="container mx-auto py-20 lg:py-28 xl:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+    <section className={cn("border-b border-border/60", className)}>
+      <div className="container mx-auto py-10 sm:py-12 lg:py-14">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-14">
 
-          {/* Left column — text */}
+          {/* Left — text */}
           <div className="flex flex-col items-start">
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-foreground/12 bg-card px-4 py-1.5 text-xs font-medium tracking-wide text-foreground/55">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/12 bg-card px-3.5 py-1 text-[11px] font-medium tracking-wide text-foreground/55 sm:mb-5">
               <span className="size-1.5 rounded-full bg-foreground/40" />
               Verified views &amp; escrow-backed payouts
             </div>
 
-            <h1 className="max-w-xl text-balance text-5xl font-extrabold leading-[1.06] tracking-[-0.03em] text-foreground sm:text-6xl lg:text-[3.75rem] xl:text-7xl">
+            <h1 className="max-w-xl text-balance text-3xl font-extrabold leading-[1.08] tracking-[-0.03em] text-foreground sm:text-4xl lg:text-5xl xl:text-[3.25rem]">
               {title}
             </h1>
 
-            <p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+            <p className="mt-4 max-w-lg text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
               {description}
             </p>
 
-            <div className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <div className="mt-6 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:items-center">
               <Button
                 render={<a href={primaryButtonUrl} />}
                 nativeButton={false}
-                className="h-12 rounded-xl px-8 text-sm font-semibold sm:text-base"
+                className="h-10 rounded-xl px-6 text-sm font-semibold sm:h-11 sm:px-7"
               >
                 {primaryButtonText}
               </Button>
@@ -66,39 +66,50 @@ const Hero195 = ({
                   variant="outline"
                   render={<a href={secondaryButtonUrl} />}
                   nativeButton={false}
-                  className="h-12 rounded-xl px-8 text-sm font-semibold sm:text-base"
+                  className="h-10 rounded-xl px-6 text-sm font-semibold sm:h-11 sm:px-7"
                 >
                   {secondaryButtonText}
                 </Button>
               )}
             </div>
 
-            <p className="mt-8 text-xs font-medium tracking-wide text-muted-foreground/70">
-              Built for brand and creator teams operating at scale.
-            </p>
-          </div>
-
-          {/* Right column — metrics panel */}
-          <div className="rounded-2xl border border-border/70 bg-card p-6 shadow-[var(--shadow-soft)]">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2 rounded-xl border border-border/60 bg-muted/50 px-5 py-6">
-                <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Escrow funded</p>
-                <p className="mt-3 text-4xl font-extrabold tracking-[-0.03em] text-foreground">$1.2M</p>
-                <p className="mt-1 text-sm text-muted-foreground">across active campaigns</p>
+            {/* Inline stats — visible only on mobile where the panel is hidden */}
+            <div className="mt-8 grid w-full grid-cols-3 gap-3 rounded-xl border border-border/60 bg-muted/40 px-4 py-4 lg:hidden">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Escrow funded</p>
+                <p className="mt-1.5 text-xl font-extrabold tracking-tight text-foreground">$1.2M</p>
               </div>
-              <div className="rounded-xl border border-border/60 bg-muted/50 px-5 py-5">
-                <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Verified views</p>
-                <p className="mt-3 text-3xl font-extrabold tracking-[-0.03em] text-foreground">18.4M</p>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Views verified</p>
+                <p className="mt-1.5 text-xl font-extrabold tracking-tight text-foreground">18.4M</p>
               </div>
-              <div className="rounded-xl border border-border/60 bg-muted/50 px-5 py-5">
-                <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Payout rate</p>
-                <p className="mt-3 text-3xl font-extrabold tracking-[-0.03em] text-foreground">98.7%</p>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Payout rate</p>
+                <p className="mt-1.5 text-xl font-extrabold tracking-tight text-foreground">98.7%</p>
               </div>
             </div>
+          </div>
 
-            <div className="mt-4 flex items-center justify-between rounded-xl border border-border/60 bg-background px-4 py-3.5">
-              <p className="text-sm text-muted-foreground">Campaign controls and payout signals stay aligned.</p>
-              <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-foreground/6 px-3 py-1 text-xs font-semibold text-foreground/70">
+          {/* Right — metrics panel, desktop only */}
+          <div className="hidden rounded-2xl border border-border/70 bg-card p-5 shadow-[var(--shadow-soft)] lg:block">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2 rounded-xl border border-border/60 bg-muted/50 px-5 py-5">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Escrow funded</p>
+                <p className="mt-2 text-4xl font-extrabold tracking-[-0.03em] text-foreground">$1.2M</p>
+                <p className="mt-1 text-xs text-muted-foreground">across active campaigns</p>
+              </div>
+              <div className="rounded-xl border border-border/60 bg-muted/50 px-4 py-4">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Verified views</p>
+                <p className="mt-2 text-2xl font-extrabold tracking-tight text-foreground">18.4M</p>
+              </div>
+              <div className="rounded-xl border border-border/60 bg-muted/50 px-4 py-4">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Payout rate</p>
+                <p className="mt-2 text-2xl font-extrabold tracking-tight text-foreground">98.7%</p>
+              </div>
+            </div>
+            <div className="mt-3 flex items-center justify-between rounded-xl border border-border/60 bg-background px-4 py-3">
+              <p className="text-xs text-muted-foreground">Campaign controls and payout signals stay aligned.</p>
+              <span className="ml-3 flex shrink-0 items-center gap-1.5 rounded-full bg-foreground/6 px-2.5 py-1 text-[11px] font-semibold text-foreground/70">
                 <span className="size-1.5 rounded-full bg-emerald-500" />
                 Live
               </span>

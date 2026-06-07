@@ -170,13 +170,13 @@ const Testimonial8 = (props: Props) => {
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
             Testimonials
           </p>
-          <h2 className="max-w-3xl text-balance text-3xl font-extrabold tracking-[-0.02em] md:text-center lg:text-5xl">
+          <h2 className="max-w-3xl text-balance text-2xl font-extrabold tracking-[-0.02em] sm:text-3xl md:text-center lg:text-4xl">
             {heading}
           </h2>
-          <p className="max-w-2xl text-muted-foreground md:text-center lg:text-lg lg:leading-8">{description}</p>
+          <p className="max-w-2xl text-sm text-muted-foreground sm:text-base md:text-center lg:leading-8">{description}</p>
         </div>
-        <div className="relative mt-12 w-full">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="relative mt-8 w-full sm:mt-10">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
             {list.map((testimonial, idx) => {
               return (
                 <div key={testimonial.id ?? idx}>

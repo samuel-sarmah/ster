@@ -121,17 +121,17 @@ const Contact2 = (props: Props) => {
   return (
     <section className={cn("section-padding border-t border-border/60", className)}>
       <div className="container mx-auto">
-        <div className="flex flex-col gap-16 lg:flex-row lg:gap-24">
-          <div className="flex flex-1 flex-col gap-10">
-            <div className="flex flex-col gap-4">
-              <h2 className="text-4xl font-bold tracking-[-0.02em] text-pretty md:text-5xl lg:text-6xl">
+        <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
+          <div className="flex flex-1 flex-col gap-7">
+            <div className="flex flex-col gap-3">
+              <h2 className="text-2xl font-bold tracking-[-0.02em] text-pretty sm:text-3xl lg:text-4xl">
                 {title}
               </h2>
-              <p className="max-w-2xl text-muted-foreground lg:text-lg lg:leading-8 lg:text-balance">
+              <p className="max-w-xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
                 {description}
               </p>
             </div>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
               <a
                 href={`tel:${phone}`}
                 className="group flex items-center gap-3"
@@ -167,7 +167,7 @@ const Contact2 = (props: Props) => {
           <div className="flex-1">
             <form
               onSubmit={form.handleSubmit(handleFormSubmit)}
-              className="flex flex-col gap-6 rounded-2xl border border-border/80 bg-card/85 p-8 shadow-[var(--shadow-soft)] backdrop-blur-sm md:p-10"
+              className="flex flex-col gap-5 rounded-2xl border border-border/80 bg-card/85 p-5 shadow-[var(--shadow-soft)] sm:p-7"
             >
               <div className="flex flex-col gap-1">
                 <h2 className="text-xl font-semibold tracking-tight text-balance">
