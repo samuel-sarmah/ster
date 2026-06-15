@@ -147,7 +147,15 @@
   h3,
   h4 {
     @apply font-heading;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+  }
+
+  h1, h2 {
+    font-weight: 900;
+  }
+
+  h3, h4 {
+    font-weight: 700;
   }
 }
 
@@ -161,6 +169,11 @@
   .container {
     padding-inline: 2rem;
   }
+}
+
+@keyframes scroll-up {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
 }
 
 @keyframes fade-up {
@@ -198,7 +211,7 @@
 
 @layer utilities {
   .section-padding {
-    @apply py-12 sm:py-14 lg:py-16;
+    @apply py-14 sm:py-18 lg:py-22;
   }
 
   .brand-gradient {
@@ -244,12 +257,46 @@
   .animation-delay-300 {
     animation-delay: 0.3s;
   }
+
+  .section-dark {
+    background-color: oklch(0.05 0 0);
+    color: oklch(0.98 0 0);
+  }
+
+  .section-dark .text-muted-foreground {
+    color: oklch(0.65 0.005 30);
+  }
+
+  .section-dark .border-border\/60 {
+    border-color: oklch(0.25 0.005 30 / 0.6);
+  }
+
+  .badge-accent {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em];
+    background-color: oklch(0.55 0.15 40);
+    color: oklch(1 0 0);
+  }
+
+  .badge-dark {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em];
+    background-color: oklch(0.05 0 0);
+    color: oklch(1 0 0);
+  }
+
+  .section-label {
+    @apply text-[10px] font-bold uppercase tracking-[0.12em];
+  }
+
+  .animate-scroll-up {
+    animation: scroll-up var(--scroll-duration, 25s) linear infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
   .animate-soft-float,
-  .animate-sweep {
+  .animate-sweep,
+  .animate-scroll-up {
     animation: none;
   }
 }
