@@ -54,6 +54,8 @@ interface Navbar1Props {
       url: string;
     };
   };
+  isLoggedIn?: boolean;
+  dashboardUrl?: string;
 }
 
 const Navbar1 = ({
@@ -139,6 +141,8 @@ const Navbar1 = ({
     login: { title: "Login", url: "#" },
     signup: { title: "Sign up", url: "#" },
   },
+  isLoggedIn = false,
+  dashboardUrl = "/",
   className,
 }: Navbar1Props) => {
   return (
