@@ -21,7 +21,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 export function SiteFooter() {
   return (
     <Footer7
-      className="border-t border-border/80 bg-card/50 py-14"
+      className=""
       logo={{
         url: "/",
         src: "/favicon.ico",
