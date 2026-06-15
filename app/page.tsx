@@ -1,24 +1,7 @@
-import { Hero195, type PixabayVideo } from "@/components/hero195";
-import { BrandShowcase } from "@/components/brand-showcase";
-import { Pricing11 } from "@/components/pricing11";
+import { createClient } from "@/lib/supabase/server";
+import { CampaignMarketplace } from "@/components/campaign-marketplace";
 import { Testimonial8 } from "@/components/testimonial8";
-import { Contact2 } from "@/components/contact2";
-
-async function getCreatorVideos(): Promise<PixabayVideo[]> {
-  const key = process.env.NEXT_PUBLIC_PIXABAY_KEY;
-  if (!key) return [];
-  try {
-    const res = await fetch(
-      `https://pixabay.com/api/videos/?key=${key}&q=brand+marketing+lifestyle&per_page=12&video_type=all`,
-      { next: { revalidate: 86400 } }
-    );
-    if (!res.ok) return [];
-    const data = await res.json();
-    return (data.hits ?? []) as PixabayVideo[];
-  } catch {
-    return [];
-  }
-}
+import type { CampaignCardProps } from "@/components/campaign-card";
 
 const testimonials = [
   {
