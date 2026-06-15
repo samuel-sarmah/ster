@@ -35,7 +35,7 @@ export default async function CreatorDashboardPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6">
       <h1 className="text-2xl font-bold">Creator dashboard</h1>
 
       <div className="grid grid-cols-3 gap-4">

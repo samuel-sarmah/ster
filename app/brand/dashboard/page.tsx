@@ -28,7 +28,7 @@ export default async function BrandDashboardPage() {
   const activeCampaigns = (campaigns ?? []).filter((c) => c.status === "active").length;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Brand dashboard</h1>
         <Link href="/brand/campaigns/new" className={buttonVariants()}>
