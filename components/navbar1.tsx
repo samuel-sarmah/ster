@@ -171,8 +171,14 @@ const Navbar1 = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" render={<a href={auth.login.url} />} nativeButton={false}>{auth.login.title}</Button>
-            <Button size="sm" render={<a href={auth.signup.url} />} nativeButton={false}>{auth.signup.title}</Button>
+            {isLoggedIn ? (
+              <Button size="sm" className="rounded-lg font-bold text-xs" render={<a href={dashboardUrl} />} nativeButton={false}>Dashboard</Button>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" className="rounded-lg font-bold text-xs" render={<a href={auth.login.url} />} nativeButton={false}>{auth.login.title}</Button>
+                <Button size="sm" className="rounded-lg font-bold text-xs" render={<a href={auth.signup.url} />} nativeButton={false}>{auth.signup.title}</Button>
+              </>
+            )}
           </div>
         </nav>
 
