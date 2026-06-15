@@ -143,74 +143,70 @@ const defaultProps: Testimonial8Props = {
   ],
 };
 
-const lineClamps = [
-  "line-clamp-3",
-  "line-clamp-5",
-  "line-clamp-2",
-  "line-clamp-4",
-  "line-clamp-3",
-  "line-clamp-5",
-  "line-clamp-2",
-  "line-clamp-4",
-  "line-clamp-3",
-];
+const COLUMN_DURATIONS = [28, 22, 25];
+
+const TestimonialCard = ({ testimonial }: { testimonial: TestimonialBasicGridItem }) => (
+  <Card className="border border-white/10 bg-white/5 p-5 shrink-0 hover:translate-y-0 hover:shadow-none">
+    <div className="flex gap-4 leading-5">
+      <Avatar className="size-10 rounded-full ring-1 ring-white/20">
+        <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+      </Avatar>
+      <div className="mb-2 text-sm">
+        <p className="font-bold text-white">{testimonial.name}</p>
+        <p className="text-white/50">{testimonial.role}</p>
+      </div>
+    </div>
+    <div className="mt-1 leading-7 text-white/70">
+      <q>{testimonial.content}</q>
+    </div>
+  </Card>
+);
 
 const Testimonial8 = (props: Props) => {
-  const { heading, description, testimonials, className } = {
+  const { heading, testimonials, className } = {
     ...defaultProps,
     ...props,
   };
 
-  const list = testimonials.slice(0, 9);
+  const list = testimonials.slice(0, 6);
+
+  const columns = [
+    [list[0], list[3]].filter(Boolean),
+    [list[1], list[4]].filter(Boolean),
+    [list[2], list[5]].filter(Boolean),
+  ];
 
   return (
-    <section className={cn("section-padding border-t border-border/60", className)}>
-      <div className="container">
+    <section className={cn("section-dark section-padding overflow-hidden", className)}>
+      <div className="w-4/5 mx-auto">
         <div className="flex flex-col items-start gap-3 md:items-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Testimonials
-          </p>
-          <h2 className="max-w-3xl text-balance text-2xl font-extrabold tracking-[-0.02em] sm:text-3xl md:text-center lg:text-4xl">
+          <h2 className="max-w-3xl text-balance text-2xl font-black tracking-[-0.03em] sm:text-3xl md:text-center lg:text-4xl">
             {heading}
           </h2>
-          <p className="max-w-2xl text-sm text-muted-foreground sm:text-base md:text-center lg:leading-8">{description}</p>
         </div>
-        <div className="relative mt-8 w-full sm:mt-10">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-            {list.map((testimonial, idx) => {
-              return (
-                <div key={testimonial.id ?? idx}>
-                  <Card className="h-full border-border/60 bg-card p-5">
-                    <div className="flex gap-4 leading-5">
-                      <Avatar className="size-10 rounded-full ring-1 ring-border">
-                        <AvatarImage
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                        />
-                      </Avatar>
-                      <div className="mb-2 text-sm">
-                        <p className="font-semibold text-foreground">
-                          {testimonial.name}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {testimonial.role}
-                        </p>
-                      </div>
-                    </div>
 
-                    <div
-                      className={cn(
-                        "leading-7 text-foreground/75",
-                        lineClamps[idx],
-                      )}
-                    >
-                      <q>{testimonial.content}</q>
-                    </div>
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
+        <div
+          className="relative mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-hidden"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent, black 14%, black 86%, transparent)",
+          }}
+        >
+          {columns.map((items, colIdx) => (
+            <div
+              key={colIdx}
+              className={cn(
+                "flex flex-col gap-4",
+                colIdx === 1 && "hidden sm:flex",
+                colIdx === 2 && "hidden lg:flex",
+                "animate-scroll-up",
+              )}
+              style={{ "--scroll-duration": `${COLUMN_DURATIONS[colIdx]}s` } as React.CSSProperties}
+            >
+              {[...items, ...items].map((t, i) => (
+                <TestimonialCard key={i} testimonial={t} />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>
