@@ -54,51 +54,152 @@ const testimonials = [
   },
 ];
 
+async function fetchPixabayVideo(query: string): Promise<string | null> {
+  const key = process.env.PIXABAY_API_KEY;
+  if (!key) return null;
+  try {
+    const res = await fetch(
+      `https://pixabay.com/api/videos/?key=${key}&q=${encodeURIComponent(query)}&per_page=3&safesearch=true`,
+      { next: { revalidate: 3600 } },
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return (data.hits?.[0]?.videos?.tiny?.url as string) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const PLACEHOLDER_CAMPAIGNS: Omit<CampaignCardProps, "videoUrl">[] = [
+  {
+    id: "demo-1",
+    title: "Summer Lifestyle Collection",
+    description: "Showcase our new summer line with authentic lifestyle content. Casual, sun-drenched, aspirational.",
+    target_cpm: 8.5,
+    total_budget: 15000,
+    spent_budget: 3200,
+    platforms: ["instagram", "tiktok"],
+    brand_name: "Luminos Co.",
+    ends_at: "2026-08-31",
+  },
+  {
+    id: "demo-2",
+    title: "Peak Performance Q3",
+    description: "We want creators pushing limits — gym, trail, court. Show what peak looks like to your audience.",
+    target_cpm: 6.0,
+    total_budget: 22000,
+    spent_budget: 7800,
+    platforms: ["youtube", "tiktok"],
+    brand_name: "AthleteX",
+    ends_at: "2026-09-15",
+  },
+  {
+    id: "demo-3",
+    title: "Glow Season Campaign",
+    description: "Skincare + confidence. We need authentic before/after routines and honest reviews.",
+    target_cpm: 10.0,
+    total_budget: 18500,
+    spent_budget: 1100,
+    platforms: ["instagram"],
+    brand_name: "Velour Beauty",
+    ends_at: "2026-07-20",
+  },
+  {
+    id: "demo-4",
+    title: "Home Chef Series",
+    description: "Weeknight recipes, elevated. Feature our cookware in real home kitchens — no staged studio shots.",
+    target_cpm: 5.5,
+    total_budget: 9000,
+    spent_budget: 4400,
+    platforms: ["youtube", "instagram"],
+    brand_name: "Harvest Table",
+    ends_at: "2026-10-01",
+  },
+  {
+    id: "demo-5",
+    title: "Tech Drop Fall 2026",
+    description: "Unbox, review, and integrate our latest device into your daily workflow. Honest takes preferred.",
+    target_cpm: 12.0,
+    total_budget: 30000,
+    spent_budget: 9600,
+    platforms: ["youtube", "x"],
+    brand_name: "NovaTech",
+    ends_at: "2026-11-30",
+  },
+  {
+    id: "demo-6",
+    title: "Explore with Us",
+    description: "Travel content that feels real. Capture the destination, the food, the unexpected moments.",
+    target_cpm: 7.0,
+    total_budget: 12000,
+    spent_budget: 2000,
+    platforms: ["tiktok", "instagram"],
+    brand_name: "Wanderbound",
+    ends_at: "2026-09-30",
+  },
+];
+
+const PLACEHOLDER_VIDEO_QUERIES = [
+  "lifestyle summer",
+  "fitness workout",
+  "beauty skincare",
+  "cooking food",
+  "technology",
+  "travel adventure",
+];
+
 export default async function Home() {
-  const creatorVideos = await getCreatorVideos();
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("campaigns")
+    .select(
+      "id, title, description, target_cpm, total_budget, spent_budget, platforms, ends_at, brand_profiles ( company_name )",
+    )
+    .eq("status", "active")
+    .order("target_cpm", { ascending: false });
+
+  const rows = data ?? [];
+
+  let campaigns: CampaignCardProps[];
+
+  if (rows.length > 0) {
+    const videoUrls = await Promise.all(
+      rows.map((row: any) => fetchPixabayVideo(row.title as string)),
+    );
+    campaigns = rows.map((row: any, i) => ({
+      id: row.id as string,
+      title: row.title as string,
+      description: row.description as string | null,
+      target_cpm: row.target_cpm as number,
+      total_budget: row.total_budget as number,
+      spent_budget: row.spent_budget as number,
+      platforms: row.platforms as string[],
+      ends_at: row.ends_at as string | null,
+      brand_name:
+        (row.brand_profiles as { company_name: string } | null)?.company_name ??
+        "Unknown Brand",
+      videoUrl: videoUrls[i],
+    }));
+  } else {
+    const videoUrls = await Promise.all(
+      PLACEHOLDER_VIDEO_QUERIES.map(fetchPixabayVideo),
+    );
+    campaigns = PLACEHOLDER_CAMPAIGNS.map((c, i) => ({
+      ...c,
+      videoUrl: videoUrls[i],
+    }));
+  }
 
   return (
-    <main className="bg-background">
-      <section id="hero">
-        <Hero195
-          description="Sterclip helps brands fund escrow-backed campaigns, creators submit confidently, and payouts release only after views are verified."
-          primaryButtonText="Start your first campaign"
-          primaryButtonUrl="/signup"
-          secondaryButtonText="Creator sign in"
-          secondaryButtonUrl="/login"
-        />
-      </section>
-
-      <section id="gallery" className="scroll-mt-20">
-        <BrandShowcase videos={creatorVideos} />
-      </section>
-
-      <section id="pricing" className="scroll-mt-20">
-        <Pricing11 className="animate-fade-up" />
-      </section>
+    <main>
+      <CampaignMarketplace initialCampaigns={campaigns} />
 
       <section id="testimonials" className="scroll-mt-20">
         <Testimonial8
-          className="animate-fade-up"
-          heading="Trusted by brand and creator operations teams"
-          description="Teams choose Sterclip when they need transparent workflow, fewer payout disputes, and predictable campaign performance."
+          heading="What brands and creators say"
+          description=""
           testimonials={testimonials}
-        />
-      </section>
-
-      <section id="contact" className="scroll-mt-20">
-        <Contact2
-          className="animate-fade-up"
-          title="Plan your rollout with the Sterclip team"
-          description="Tell us your campaign volume, target channels, and payout model. We will help you configure onboarding, verification, and settlement flow."
-          phone="+1 (555) 010-0240"
-          email="hello@sterclip.com"
-          web={{ label: "sterclip.com", url: "https://sterclip.com" }}
-          formHeading="Talk to Sterclip"
-          formSubheading="Share your goals and we will respond within one business day."
-          successMessage="Thanks, your request has been received."
-          submitLabel="Send request"
-          submittingLabel="Sending request..."
         />
       </section>
     </main>
