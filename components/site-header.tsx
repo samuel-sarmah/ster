@@ -1,10 +1,22 @@
-import { BookOpen, Briefcase, CircleHelp, Handshake, ShieldCheck } from "lucide-react";
+import { CircleHelp, Handshake, LayoutGrid, ShieldCheck } from "lucide-react";
 import { Navbar1 } from "@/components/navbar1";
+import { createClient } from "@/lib/supabase/server";
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const role = user?.user_metadata?.role as string | undefined;
+  const dashboardUrl =
+    role === "creator" ? "/creator/dashboard"
+    : role === "brand" ? "/brand/dashboard"
+    : role === "admin" ? "/admin/dashboard"
+    : "/";
+
   return (
     <Navbar1
-      className="sticky top-0 z-30 border-b border-border/80 bg-background/92 py-3 backdrop-blur-md"
+      isLoggedIn={!!user}
+      dashboardUrl={dashboardUrl}
+      className="sticky top-0 z-30 border-b border-border/80 bg-background py-3"
       logo={{
         url: "/",
         src: "/favicon.ico",
@@ -15,38 +27,32 @@ export function SiteHeader() {
         { title: "Home", url: "/" },
         {
           title: "Platform",
-          url: "/#hero",
+          url: "/#marketplace",
           items: [
+            {
+              title: "Browse Campaigns",
+              description: "Explore active brand campaigns sorted by payout rate.",
+              icon: <LayoutGrid className="size-5 shrink-0" />,
+              url: "/#marketplace",
+            },
             {
               title: "How It Works",
               description: "Escrow funding, creator submissions, and verified payouts in one flow.",
               icon: <Handshake className="size-5 shrink-0" />,
-              url: "/#hero",
+              url: "/#how-it-works",
             },
             {
-              title: "Trust Layer",
-              description: "View counts are validated using platform signals before payouts are released.",
+              title: "Verified Payouts",
+              description: "View counts are validated via social platform APIs before payouts release.",
               icon: <ShieldCheck className="size-5 shrink-0" />,
-              url: "/#logos",
-            },
-            {
-              title: "Case Gallery",
-              description: "Explore examples of brand campaigns and creator content collaborations.",
-              icon: <BookOpen className="size-5 shrink-0" />,
-              url: "/#gallery",
+              url: "/#how-it-works",
             },
           ],
         },
         {
           title: "Company",
-          url: "/#contact",
+          url: "/#testimonials",
           items: [
-            {
-              title: "Pricing",
-              description: "Choose the best operating mode for your team and campaign volume.",
-              icon: <Briefcase className="size-5 shrink-0" />,
-              url: "/#pricing",
-            },
             {
               title: "Testimonials",
               description: "See how brands and creators are scaling with Sterclip.",
@@ -55,7 +61,6 @@ export function SiteHeader() {
             },
           ],
         },
-        { title: "Contact", url: "/#contact" },
       ]}
       auth={{
         login: { title: "Sign in", url: "/login" },
