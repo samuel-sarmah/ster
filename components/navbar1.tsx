@@ -147,18 +147,18 @@ const Navbar1 = ({
 }: Navbar1Props) => {
   return (
     <section className={cn("py-3", className)}>
-      <div className="container">
+      <div className="w-4/5 mx-auto">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
-                className="max-h-8"
+                className="max-h-7"
                 alt={logo.alt}
               />
-              <span className="text-lg font-semibold tracking-tight">
+              <span className="text-base font-black tracking-tight">
                 {logo.title}
               </span>
             </a>
@@ -189,19 +189,19 @@ const Navbar1 = ({
             <a href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
-                className="max-h-8"
+                className="max-h-7"
                 alt={logo.alt}
               />
             </a>
             <Sheet>
               <SheetTrigger render={<Button variant="outline" size="icon" />}><Menu className="size-4" /></SheetTrigger>
-              <SheetContent className="overflow-y-auto border-l border-border/80 bg-card/95 backdrop-blur">
+              <SheetContent className="overflow-y-auto border-l border-border/80 bg-background">
                 <SheetHeader>
                   <SheetTitle>
                     <a href={logo.url} className="flex items-center gap-2">
                       <img
                         src={logo.src}
-                        className="max-h-8"
+                        className="max-h-7"
                         alt={logo.alt}
                       />
                     </a>
