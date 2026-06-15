@@ -186,11 +186,12 @@ export function CampaignWizard() {
               <Input
                 type="number"
                 min={0.01}
+                max={4}
                 step={0.01}
                 className="pl-7"
                 value={form.target_cpm}
                 onChange={(e) => set("target_cpm", e.target.value)}
-                placeholder="5.00"
+                placeholder="2.50"
               />
             </div>
           </div>
