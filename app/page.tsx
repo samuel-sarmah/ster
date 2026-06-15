@@ -54,98 +54,98 @@ const testimonials = [
   },
 ];
 
-async function fetchPixabayVideo(query: string): Promise<string | null> {
+async function fetchPixabayImage(query: string): Promise<string | null> {
   const key = process.env.PIXABAY_API_KEY;
   if (!key) return null;
   try {
     const res = await fetch(
-      `https://pixabay.com/api/videos/?key=${key}&q=${encodeURIComponent(query)}&per_page=3&safesearch=true`,
+      `https://pixabay.com/api/?key=${key}&q=${encodeURIComponent(query)}&per_page=3&safesearch=true`,
       { next: { revalidate: 3600 } },
     );
     if (!res.ok) return null;
     const data = await res.json();
-    return (data.hits?.[0]?.videos?.tiny?.url as string) ?? null;
+    return (data.hits?.[0]?.webformatURL as string) ?? null;
   } catch {
     return null;
   }
 }
 
-const PLACEHOLDER_CAMPAIGNS: Omit<CampaignCardProps, "videoUrl">[] = [
-  {
-    id: "demo-1",
-    title: "Summer Lifestyle Collection",
-    description: "Showcase our new summer line with authentic lifestyle content. Casual, sun-drenched, aspirational.",
-    target_cpm: 8.5,
-    total_budget: 15000,
-    spent_budget: 3200,
-    platforms: ["instagram", "tiktok"],
-    brand_name: "Luminos Co.",
-    ends_at: "2026-08-31",
-  },
-  {
-    id: "demo-2",
-    title: "Peak Performance Q3",
-    description: "We want creators pushing limits — gym, trail, court. Show what peak looks like to your audience.",
-    target_cpm: 6.0,
-    total_budget: 22000,
-    spent_budget: 7800,
-    platforms: ["youtube", "tiktok"],
-    brand_name: "AthleteX",
-    ends_at: "2026-09-15",
-  },
-  {
-    id: "demo-3",
-    title: "Glow Season Campaign",
-    description: "Skincare + confidence. We need authentic before/after routines and honest reviews.",
-    target_cpm: 10.0,
-    total_budget: 18500,
-    spent_budget: 1100,
-    platforms: ["instagram"],
-    brand_name: "Velour Beauty",
-    ends_at: "2026-07-20",
-  },
-  {
-    id: "demo-4",
-    title: "Home Chef Series",
-    description: "Weeknight recipes, elevated. Feature our cookware in real home kitchens — no staged studio shots.",
-    target_cpm: 5.5,
-    total_budget: 9000,
-    spent_budget: 4400,
-    platforms: ["youtube", "instagram"],
-    brand_name: "Harvest Table",
-    ends_at: "2026-10-01",
-  },
-  {
-    id: "demo-5",
-    title: "Tech Drop Fall 2026",
-    description: "Unbox, review, and integrate our latest device into your daily workflow. Honest takes preferred.",
-    target_cpm: 12.0,
-    total_budget: 30000,
-    spent_budget: 9600,
-    platforms: ["youtube", "x"],
-    brand_name: "NovaTech",
-    ends_at: "2026-11-30",
-  },
-  {
-    id: "demo-6",
-    title: "Explore with Us",
-    description: "Travel content that feels real. Capture the destination, the food, the unexpected moments.",
-    target_cpm: 7.0,
-    total_budget: 12000,
-    spent_budget: 2000,
-    platforms: ["tiktok", "instagram"],
-    brand_name: "Wanderbound",
-    ends_at: "2026-09-30",
-  },
+const PLACEHOLDER_CAMPAIGNS: Omit<CampaignCardProps, "imageUrl">[] = [
+  { id: "demo-1", title: "Summer Lifestyle Collection", description: "", target_cpm: 2.5, total_budget: 4000, spent_budget: 800, platforms: ["instagram", "tiktok"], brand_name: "Luminos Co.", ends_at: "2026-08-31" },
+  { id: "demo-2", title: "Peak Performance Q3", description: "", target_cpm: 1.8, total_budget: 2500, spent_budget: 900, platforms: ["youtube", "tiktok"], brand_name: "AthleteX", ends_at: "2026-09-15" },
+  { id: "demo-3", title: "Glow Season Campaign", description: "", target_cpm: 3.0, total_budget: 3500, spent_budget: 200, platforms: ["instagram"], brand_name: "Velour Beauty", ends_at: "2026-07-20" },
+  { id: "demo-4", title: "Home Chef Series", description: "", target_cpm: 1.5, total_budget: 2000, spent_budget: 1000, platforms: ["youtube", "instagram"], brand_name: "Harvest Table", ends_at: "2026-10-01" },
+  { id: "demo-5", title: "Tech Drop Fall 2026", description: "", target_cpm: 3.5, total_budget: 4000, spent_budget: 1200, platforms: ["youtube", "x"], brand_name: "NovaTech", ends_at: "2026-11-30" },
+  { id: "demo-6", title: "Explore with Us", description: "", target_cpm: 2.0, total_budget: 3000, spent_budget: 500, platforms: ["tiktok", "instagram"], brand_name: "Wanderbound", ends_at: "2026-09-30" },
+  { id: "demo-7", title: "Morning Brew Launch", description: "", target_cpm: 2.8, total_budget: 3500, spent_budget: 2000, platforms: ["instagram", "tiktok"], brand_name: "Café Oro", ends_at: "2026-08-15" },
+  { id: "demo-8", title: "Streetwear Drop Vol 3", description: "", target_cpm: 3.2, total_budget: 4000, spent_budget: 500, platforms: ["tiktok", "instagram"], brand_name: "Axis Collective", ends_at: "2026-07-30" },
+  { id: "demo-9", title: "Pet Wellness Push", description: "", target_cpm: 1.2, total_budget: 1500, spent_budget: 600, platforms: ["instagram", "youtube"], brand_name: "Paws & Co.", ends_at: "2026-09-01" },
+  { id: "demo-10", title: "Pro Gamer Series", description: "", target_cpm: 4.0, total_budget: 4000, spent_budget: 1200, platforms: ["youtube", "tiktok", "x"], brand_name: "Titan Gaming", ends_at: "2026-12-15" },
+  { id: "demo-11", title: "Plant Based Revolution", description: "", target_cpm: 2.0, total_budget: 3000, spent_budget: 1200, platforms: ["instagram", "youtube"], brand_name: "GreenRoot", ends_at: "2026-10-20" },
+  { id: "demo-12", title: "Luxury Fragrance Edit", description: "", target_cpm: 4.0, total_budget: 4000, spent_budget: 1000, platforms: ["instagram"], brand_name: "Maison Noire", ends_at: "2026-08-01" },
+  { id: "demo-13", title: "Back to School Tech", description: "", target_cpm: 2.2, total_budget: 3000, spent_budget: 1400, platforms: ["youtube", "tiktok"], brand_name: "Pencil+", ends_at: "2026-08-25" },
+  { id: "demo-14", title: "Fitness App Challenge", description: "", target_cpm: 2.5, total_budget: 3500, spent_budget: 700, platforms: ["tiktok", "instagram"], brand_name: "SweatLab", ends_at: "2026-09-10" },
+  { id: "demo-15", title: "Eco Home Goods", description: "", target_cpm: 1.5, total_budget: 2000, spent_budget: 600, platforms: ["instagram", "youtube"], brand_name: "Terra Nest", ends_at: "2026-11-01" },
+  { id: "demo-16", title: "Summer Music Fest", description: "", target_cpm: 2.8, total_budget: 4000, spent_budget: 2200, platforms: ["tiktok", "instagram", "x"], brand_name: "SunStage", ends_at: "2026-07-25" },
+  { id: "demo-17", title: "Road Trip Ready", description: "", target_cpm: 1.8, total_budget: 2500, spent_budget: 800, platforms: ["youtube", "instagram"], brand_name: "DriveFree", ends_at: "2026-09-20" },
+  { id: "demo-18", title: "Minimalist Wardrobe", description: "", target_cpm: 2.5, total_budget: 3000, spent_budget: 100, platforms: ["instagram", "tiktok"], brand_name: "Studio Basic", ends_at: "2026-08-10" },
+  { id: "demo-19", title: "Gourmet Snack Box", description: "", target_cpm: 1.2, total_budget: 1500, spent_budget: 500, platforms: ["tiktok", "instagram"], brand_name: "BiteSociety", ends_at: "2026-10-05" },
+  { id: "demo-20", title: "Yoga Retreat 2026", description: "", target_cpm: 2.0, total_budget: 3500, spent_budget: 1700, platforms: ["instagram", "youtube"], brand_name: "ZenVista", ends_at: "2026-08-20" },
+  { id: "demo-21", title: "Coffee Subscription Launch", description: "", target_cpm: 2.5, total_budget: 3000, spent_budget: 900, platforms: ["instagram", "tiktok"], brand_name: "BrewPost", ends_at: "2026-09-25" },
+  { id: "demo-22", title: "Sustainable Denim Line", description: "", target_cpm: 2.8, total_budget: 4000, spent_budget: 1400, platforms: ["instagram", "youtube"], brand_name: "Loop Denim", ends_at: "2026-10-15" },
+  { id: "demo-23", title: "Gadget Gift Guide", description: "", target_cpm: 3.5, total_budget: 4000, spent_budget: 600, platforms: ["youtube", "x"], brand_name: "GizmoHub", ends_at: "2026-11-20" },
+  { id: "demo-24", title: "Skincare for Men", description: "", target_cpm: 2.2, total_budget: 2500, spent_budget: 500, platforms: ["tiktok", "instagram"], brand_name: "RuggedSkin", ends_at: "2026-08-05" },
+  { id: "demo-25", title: "Family Board Game Night", description: "", target_cpm: 1.2, total_budget: 1500, spent_budget: 700, platforms: ["youtube", "instagram"], brand_name: "TableTop Co.", ends_at: "2026-12-01" },
+  { id: "demo-26", title: "Zero Proof Cocktails", description: "", target_cpm: 1.8, total_budget: 2000, spent_budget: 300, platforms: ["tiktok", "instagram"], brand_name: "Dry Bar", ends_at: "2026-07-15" },
+  { id: "demo-27", title: "Winter Gear Pre-Order", description: "", target_cpm: 1.5, total_budget: 2500, spent_budget: 200, platforms: ["youtube", "instagram"], brand_name: "Alpine Kit", ends_at: "2026-10-30" },
+  { id: "demo-28", title: "Crypto Wallet Campaign", description: "", target_cpm: 4.0, total_budget: 4000, spent_budget: 1800, platforms: ["x", "youtube"], brand_name: "BlockVault", ends_at: "2026-11-15" },
+  { id: "demo-29", title: "Haircare Refresh", description: "", target_cpm: 2.5, total_budget: 3000, spent_budget: 1200, platforms: ["instagram", "tiktok"], brand_name: "Strand", ends_at: "2026-09-05" },
+  { id: "demo-30", title: "Outdoor Gear Test", description: "", target_cpm: 2.0, total_budget: 2500, spent_budget: 1000, platforms: ["youtube", "tiktok"], brand_name: "Wilder Goods", ends_at: "2026-08-28" },
+  { id: "demo-31", title: "Daily Desk Setup", description: "", target_cpm: 2.0, total_budget: 2000, spent_budget: 400, platforms: ["instagram", "tiktok"], brand_name: "WorkForm", ends_at: "2026-09-12" },
+  { id: "demo-32", title: "Matcha & Mindfulness", description: "", target_cpm: 1.5, total_budget: 2000, spent_budget: 900, platforms: ["instagram", "tiktok"], brand_name: "ZenCha", ends_at: "2026-08-18" },
+  { id: "demo-33", title: "Sneaker Culture Vol 2", description: "", target_cpm: 3.5, total_budget: 4000, spent_budget: 2200, platforms: ["tiktok", "instagram", "x"], brand_name: "Kick Collective", ends_at: "2026-10-10" },
+  { id: "demo-34", title: "Organic Baby Line", description: "", target_cpm: 1.0, total_budget: 1500, spent_budget: 500, platforms: ["instagram", "youtube"], brand_name: "Little Sprout", ends_at: "2026-09-28" },
+  { id: "demo-35", title: "E-Bike City Series", description: "", target_cpm: 2.5, total_budget: 4000, spent_budget: 1800, platforms: ["youtube", "tiktok"], brand_name: "Volt Cycles", ends_at: "2026-11-05" },
+  { id: "demo-36", title: "Kitchen Gadget Blitz", description: "", target_cpm: 1.5, total_budget: 2000, spent_budget: 800, platforms: ["tiktok", "instagram"], brand_name: "SmartPan", ends_at: "2026-07-28" },
+  { id: "demo-37", title: "Tattoo Art Spotlight", description: "", target_cpm: 2.8, total_budget: 2000, spent_budget: 600, platforms: ["instagram"], brand_name: "InkWell", ends_at: "2026-09-22" },
+  { id: "demo-38", title: "Craft Beer Release", description: "", target_cpm: 1.8, total_budget: 2500, spent_budget: 1100, platforms: ["instagram", "tiktok"], brand_name: "Hops & Co.", ends_at: "2026-08-12" },
+  { id: "demo-39", title: "Vintage Furniture Pop-Up", description: "", target_cpm: 1.2, total_budget: 1500, spent_budget: 600, platforms: ["instagram", "x"], brand_name: "RetroForm", ends_at: "2026-10-08" },
+  { id: "demo-40", title: "Language App Campaign", description: "", target_cpm: 2.0, total_budget: 3000, spent_budget: 1300, platforms: ["tiktok", "youtube"], brand_name: "Lingua", ends_at: "2026-09-18" },
+  { id: "demo-41", title: "Sustainable Swimwear", description: "", target_cpm: 3.0, total_budget: 3000, spent_budget: 400, platforms: ["instagram", "tiktok"], brand_name: "ReefWear", ends_at: "2026-07-10" },
+  { id: "demo-42", title: "Podcast Gear Launch", description: "", target_cpm: 2.5, total_budget: 3500, spent_budget: 1500, platforms: ["youtube", "x", "tiktok"], brand_name: "MicDrop", ends_at: "2026-10-22" },
+  { id: "demo-43", title: "Festival Fashion Edit", description: "", target_cpm: 3.0, total_budget: 3500, spent_budget: 1000, platforms: ["instagram", "tiktok"], brand_name: "Rave On", ends_at: "2026-08-08" },
+  { id: "demo-44", title: "Home Workout Setup", description: "", target_cpm: 1.8, total_budget: 2500, spent_budget: 1100, platforms: ["youtube", "tiktok"], brand_name: "Iron Room", ends_at: "2026-11-10" },
+  { id: "demo-45", title: "Digital Art Tools", description: "", target_cpm: 2.2, total_budget: 2500, spent_budget: 200, platforms: ["instagram", "youtube"], brand_name: "PixelForge", ends_at: "2026-09-08" },
+  { id: "demo-46", title: "Cold Brew Variety Pack", description: "", target_cpm: 1.5, total_budget: 2000, spent_budget: 800, platforms: ["tiktok", "instagram"], brand_name: "BrewCold", ends_at: "2026-08-14" },
+  { id: "demo-47", title: "Adventure Watches", description: "", target_cpm: 3.5, total_budget: 4000, spent_budget: 1800, platforms: ["youtube", "x", "instagram"], brand_name: "Summit Time", ends_at: "2026-12-10" },
+  { id: "demo-48", title: "Plant Parent Club", description: "", target_cpm: 1.0, total_budget: 1500, spent_budget: 300, platforms: ["instagram", "tiktok"], brand_name: "Foliage Fam", ends_at: "2026-10-12" },
+  { id: "demo-49", title: "Smart Home Setup", description: "", target_cpm: 2.5, total_budget: 4000, spent_budget: 1800, platforms: ["youtube", "tiktok"], brand_name: "HausBot", ends_at: "2026-09-30" },
+  { id: "demo-50", title: "Chocolate Tasting Box", description: "", target_cpm: 1.2, total_budget: 1500, spent_budget: 600, platforms: ["instagram", "tiktok"], brand_name: "Cacao Lab", ends_at: "2026-07-22" },
+  { id: "demo-51", title: "Running Shoe Review", description: "", target_cpm: 2.0, total_budget: 3000, spent_budget: 1200, platforms: ["youtube", "tiktok"], brand_name: "Stride Co.", ends_at: "2026-10-05" },
+  { id: "demo-52", title: "Zero Waste Home Kit", description: "", target_cpm: 1.5, total_budget: 1500, spent_budget: 200, platforms: ["instagram", "youtube"], brand_name: "NoTrace", ends_at: "2026-08-30" },
+  { id: "demo-53", title: "Indie Game Spotlight", description: "", target_cpm: 3.0, total_budget: 3500, spent_budget: 1000, platforms: ["youtube", "tiktok", "x"], brand_name: "Pixels & Pints", ends_at: "2026-11-25" },
+  { id: "demo-54", title: "Essential Oil Collection", description: "", target_cpm: 2.0, total_budget: 2000, spent_budget: 600, platforms: ["instagram", "tiktok"], brand_name: "Aura Mist", ends_at: "2026-09-14" },
+  { id: "demo-55", title: "Graduation Gift Guide", description: "", target_cpm: 1.5, total_budget: 2000, spent_budget: 900, platforms: ["instagram", "tiktok"], brand_name: "GradBox", ends_at: "2026-08-22" },
+  { id: "demo-56", title: "Trail Running Series", description: "", target_cpm: 2.0, total_budget: 3500, spent_budget: 1500, platforms: ["youtube", "instagram"], brand_name: "TrailBlaze", ends_at: "2026-10-18" },
+  { id: "demo-57", title: "Sourdough Starter Kit", description: "", target_cpm: 1.0, total_budget: 1000, spent_budget: 400, platforms: ["tiktok", "instagram"], brand_name: "Bread Head", ends_at: "2026-09-02" },
+  { id: "demo-58", title: "Vegan Protein Launch", description: "", target_cpm: 2.5, total_budget: 4000, spent_budget: 2200, platforms: ["instagram", "youtube"], brand_name: "PlantFuel", ends_at: "2026-11-08" },
+  { id: "demo-59", title: "Drone Photography", description: "", target_cpm: 2.8, total_budget: 3000, spent_budget: 600, platforms: ["youtube", "instagram"], brand_name: "SkyFrame", ends_at: "2026-10-25" },
+  { id: "demo-60", title: "Holiday Decor Preview", description: "", target_cpm: 1.8, total_budget: 2500, spent_budget: 100, platforms: ["instagram", "tiktok"], brand_name: "Festive Home", ends_at: "2026-12-01" },
 ];
 
-const PLACEHOLDER_VIDEO_QUERIES = [
-  "lifestyle summer",
-  "fitness workout",
-  "beauty skincare",
-  "cooking food",
-  "technology",
-  "travel adventure",
+const PLACEHOLDER_IMAGE_QUERIES = [
+  "lifestyle summer", "fitness workout", "beauty skincare", "cooking food", "technology",
+  "travel adventure", "coffee shop", "streetwear fashion", "pets dogs", "gaming setup",
+  "plant based food", "perfume luxury", "office supplies", "gym fitness", "eco friendly home",
+  "music festival", "road trip car", "clothing minimalist", "snack food", "yoga meditation",
+  "coffee beans", "denim jeans", "gadgets tech", "men skincare", "board games",
+  "cocktail drink", "winter jacket", "bitcoin crypto", "haircare", "camping outdoors",
+  "desk workspace", "matcha tea", "sneakers shoes", "baby organic", "electric bike",
+  "kitchen tools", "tattoo art", "beer craft", "vintage furniture", "language learning",
+  "swimwear beach", "microphone podcast", "festival outfit", "home gym", "digital art tablet",
+  "cold brew coffee", "wristwatch", "indoor plants", "smart home", "chocolate dessert",
+  "running shoes", "zero waste", "video game indie", "essential oil", "graduation cap",
+  "trail running", "sourdough bread", "protein powder", "drone sky", "christmas decoration",
 ];
 
 export default async function Home() {
@@ -164,8 +164,8 @@ export default async function Home() {
   let campaigns: CampaignCardProps[];
 
   if (rows.length > 0) {
-    const videoUrls = await Promise.all(
-      rows.map((row: any) => fetchPixabayVideo(row.title as string)),
+    const imageUrls = await Promise.all(
+      rows.map((row: any) => fetchPixabayImage(row.title as string)),
     );
     campaigns = rows.map((row: any, i) => ({
       id: row.id as string,
@@ -179,20 +179,20 @@ export default async function Home() {
       brand_name:
         (row.brand_profiles as { company_name: string } | null)?.company_name ??
         "Unknown Brand",
-      videoUrl: videoUrls[i],
+      imageUrl: imageUrls[i],
     }));
   } else {
-    const videoUrls = await Promise.all(
-      PLACEHOLDER_VIDEO_QUERIES.map(fetchPixabayVideo),
+    const imageUrls = await Promise.all(
+      PLACEHOLDER_IMAGE_QUERIES.map(fetchPixabayImage),
     );
     campaigns = PLACEHOLDER_CAMPAIGNS.map((c, i) => ({
       ...c,
-      videoUrl: videoUrls[i],
+      imageUrl: imageUrls[i],
     }));
   }
 
   return (
-    <main>
+    <main className="section-dark bg-black">
       <CampaignMarketplace initialCampaigns={campaigns} />
 
       <section id="testimonials" className="scroll-mt-20">
