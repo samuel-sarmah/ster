@@ -215,8 +215,14 @@ const Navbar1 = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
-                    <Button variant="outline" render={<a href={auth.login.url} />} nativeButton={false}>{auth.login.title}</Button>
-                    <Button render={<a href={auth.signup.url} />} nativeButton={false}>{auth.signup.title}</Button>
+                    {isLoggedIn ? (
+                      <Button className="font-bold" render={<a href={dashboardUrl} />} nativeButton={false}>Dashboard</Button>
+                    ) : (
+                      <>
+                        <Button variant="outline" className="font-bold" render={<a href={auth.login.url} />} nativeButton={false}>{auth.login.title}</Button>
+                        <Button className="font-bold" render={<a href={auth.signup.url} />} nativeButton={false}>{auth.signup.title}</Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>
