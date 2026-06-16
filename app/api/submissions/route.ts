@@ -1,14 +1,30 @@
-import { createClient } from "@/lib/supabase/server";
 import { getAdapter } from "@/lib/social";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import type { Platform } from "@/lib/supabase/types";
+import { requireActiveUser } from "@/lib/auth/require-active-user";
+import { serverError } from "@/lib/api/error-response";
+
+const createSubmissionSchema = z.object({
+  campaign_id: z.string().uuid(),
+  social_account_id: z.string().uuid(),
+  post_url: z.string().url(),
+});
 
 export async function POST(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const result = await requireActiveUser();
+  if ("error" in result) return result.error;
+  const { user, supabase } = result;
 
-  const { campaign_id, social_account_id, post_url } = await request.json();
+  const body = await request.json();
+  const parsed = createSubmissionSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid input", fields: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
+  }
+  const { campaign_id, social_account_id, post_url } = parsed.data;
 
   // Verify creator is approved for this campaign
   const { data: application } = await supabase
@@ -62,7 +78,7 @@ export async function POST(request: Request) {
     .select("id")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return serverError(error, "submissions.create");
 
   return NextResponse.json({ id: submission.id }, { status: 201 });
 }

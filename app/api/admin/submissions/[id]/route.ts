@@ -1,5 +1,19 @@
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+import { serverError } from "@/lib/api/error-response";
+
+const actionSchema = z.discriminatedUnion("action", [
+  z.object({ action: z.literal("approve") }),
+  z.object({
+    action: z.literal("reject"),
+    rejection_reason: z.string().max(1000).optional(),
+  }),
+  z.object({
+    action: z.literal("override_views"),
+    verified_views: z.number().int().nonnegative(),
+  }),
+]);
 
 export async function PATCH(
   request: Request,
@@ -21,14 +35,22 @@ export async function PATCH(
 
   const { id } = await params;
   const body = await request.json();
+  const parsed = actionSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid input", fields: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
+  }
+
   const admin = await createAdminClient();
 
-  if (body.action === "approve") {
+  if (parsed.data.action === "approve") {
     const { error } = await admin
       .from("submissions")
       .update({ status: "approved", approved_at: new Date().toISOString() })
       .eq("id", id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return serverError(error, "admin.submissions.approve");
 
     // Create earnings row
     const { data: submission } = await admin
@@ -44,17 +66,17 @@ export async function PATCH(
         campaign_id: submission.campaign_id,
       });
     }
-  } else if (body.action === "reject") {
+  } else if (parsed.data.action === "reject") {
     const { error } = await admin
       .from("submissions")
       .update({
         status: "rejected",
-        rejection_reason: body.rejection_reason ?? null,
+        rejection_reason: parsed.data.rejection_reason ?? null,
       })
       .eq("id", id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  } else if (body.action === "override_views") {
-    const verifiedViews = Number(body.verified_views);
+    if (error) return serverError(error, "admin.submissions.reject");
+  } else if (parsed.data.action === "override_views") {
+    const verifiedViews = parsed.data.verified_views;
 
     const { data: submission } = await admin
       .from("submissions")
@@ -83,7 +105,7 @@ export async function PATCH(
       })
       .eq("submission_id", id);
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return serverError(error, "admin.submissions.override_views");
   }
 
   return NextResponse.json({ ok: true });

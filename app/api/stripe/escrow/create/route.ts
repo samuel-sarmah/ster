@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { getStripeClient } from "@/lib/stripe";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const escrowSchema = z.object({ campaign_id: z.string().uuid() });
 
 export async function POST(request: Request) {
   const stripe = getStripeClient();
@@ -8,7 +11,12 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { campaign_id } = await request.json();
+  const body = await request.json();
+  const parsed = escrowSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  }
+  const { campaign_id } = parsed.data;
 
   const { data: campaign } = await supabase
     .from("campaigns")
