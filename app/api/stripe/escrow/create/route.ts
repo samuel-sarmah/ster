@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     currency: "usd",
     customer: customerId,
     metadata: { campaign_id: campaign.id, brand_id: user.id },
-    description: `Sterclip escrow — ${campaign.title}`,
+    description: `Sterz escrow — ${campaign.title}`,
     automatic_payment_methods: { enabled: true },
   });
 

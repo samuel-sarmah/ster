@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sterclip — Performance Creator Marketing",
+  title: "Sterz — Performance Creator Marketing",
   description: "Brands deposit escrow. Creators post. Views verified. Creators get paid.",
 };
 

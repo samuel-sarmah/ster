@@ -25,10 +25,10 @@ export function SiteFooter() {
       logo={{
         url: "/",
         src: "/favicon.ico",
-        alt: "Sterclip",
-        title: "Sterclip",
+        alt: "Sterz",
+        title: "Sterz",
       }}
-      description="Sterclip helps brands and creators run escrow-backed campaigns with transparent performance verification and automated payouts."
+      description="Sterz helps brands and creators run escrow-backed campaigns with transparent performance verification and automated payouts."
       sections={[
         {
           title: "Platform",
@@ -60,7 +60,7 @@ export function SiteFooter() {
         { icon: <LinkedinIcon className="size-5" />, href: "https://www.linkedin.com", label: "LinkedIn" },
         { icon: <InstagramIcon className="size-5" />, href: "https://www.instagram.com", label: "Instagram" },
       ]}
-      copyright={`© ${new Date().getFullYear()} Sterclip. All rights reserved.`}
+      copyright={`© ${new Date().getFullYear()} Sterz. All rights reserved.`}
       legalLinks={[
         { name: "Terms", href: "/" },
         { name: "Privacy", href: "/" },

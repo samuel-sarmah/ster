@@ -89,7 +89,7 @@ export default function SignupPage() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Join Sterclip</CardTitle>
+        <CardTitle className="text-2xl">Join Sterz</CardTitle>
         <CardDescription>Create your account</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -32,7 +32,7 @@ const defaultSteps: Step[] = [
 ];
 
 export function HowItWorks({
-  heading = "How Sterclip works",
+  heading = "How Sterz works",
   steps = defaultSteps,
   className,
 }: HowItWorksProps) {

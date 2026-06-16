@@ -73,7 +73,7 @@ function LoginContent() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Sterclip</CardTitle>
+        <CardTitle className="text-2xl">Sterz</CardTitle>
         <CardDescription>Sign in to your account</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

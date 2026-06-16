@@ -20,8 +20,8 @@ export async function SiteHeader() {
       logo={{
         url: "/",
         src: "/favicon.ico",
-        alt: "Sterclip logo",
-        title: "Sterclip",
+        alt: "Sterz logo",
+        title: "Sterz",
       }}
       menu={[
         { title: "Home", url: "/" },
@@ -55,7 +55,7 @@ export async function SiteHeader() {
           items: [
             {
               title: "Testimonials",
-              description: "See how brands and creators are scaling with Sterclip.",
+              description: "See how brands and creators are scaling with Sterz.",
               icon: <CircleHelp className="size-5 shrink-0" />,
               url: "/#testimonials",
             },

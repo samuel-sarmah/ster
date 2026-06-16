@@ -10,7 +10,7 @@ const testimonials = [
     role: "Head of Growth, Beam Brands",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop",
     content:
-      "Sterclip gave our team one source of truth for approvals and payout readiness. We stopped reconciling creator spreadsheets manually after the first week.",
+      "Sterz gave our team one source of truth for approvals and payout readiness. We stopped reconciling creator spreadsheets manually after the first week.",
   },
   {
     id: "2",
@@ -26,7 +26,7 @@ const testimonials = [
     role: "Operations Manager, BrightCart",
     avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=400&auto=format&fit=crop",
     content:
-      "We launched across multiple channels without adding extra ops headcount. Sterclip handled queueing, status tracking, and payout flow end to end.",
+      "We launched across multiple channels without adding extra ops headcount. Sterz handled queueing, status tracking, and payout flow end to end.",
   },
   {
     id: "4",

@@ -34,7 +34,7 @@ export default async function BrandLayout({ children }: { children: React.ReactN
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-4 sm:gap-6">
             <Link href="/" className="font-semibold tracking-tight hover:text-primary transition-colors">
-              Sterclip
+              Sterz
             </Link>
             <nav className="flex flex-wrap gap-3 sm:gap-4">
               {NAV.map(({ href, label }) => (

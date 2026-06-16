@@ -33,7 +33,7 @@ export async function createEscrowPaymentIntent({
     currency: "usd",
     customer: customerId,
     metadata: { campaign_id: campaignId },
-    description: `Sterclip escrow deposit for campaign ${campaignId}`,
+    description: `Sterz escrow deposit for campaign ${campaignId}`,
     automatic_payment_methods: { enabled: true },
   });
 }

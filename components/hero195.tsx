@@ -26,7 +26,7 @@ export interface Hero195Props {
 
 const Hero195 = ({
   title = "Performance creator campaigns with verified payouts",
-  description = "Sterclip helps brands fund escrow-backed campaigns, creators submit confidently, and payouts release only after views are verified.",
+  description = "Sterz helps brands fund escrow-backed campaigns, creators submit confidently, and payouts release only after views are verified.",
   primaryButtonText = "Start your first campaign",
   primaryButtonUrl = "/signup",
   secondaryButtonText,

@@ -84,7 +84,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex flex-col">
       <header className="flex items-center justify-between px-4 py-4 border-b sm:px-6">
         <Link href="/" className="font-semibold tracking-tight hover:text-primary transition-colors">
-          Sterclip
+          Sterz
         </Link>
         <button
           onClick={handleLogout}

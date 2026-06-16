@@ -34,7 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen flex flex-col md:flex-row">
       <aside className="w-full border-b bg-muted/20 p-4 md:w-56 md:shrink-0 md:border-b-0 md:border-r md:flex md:flex-col md:gap-1">
         <Link href="/" className="mb-3 block px-2 text-sm font-semibold tracking-tight hover:text-primary transition-colors">
-          Sterclip Admin
+          Sterz Admin
         </Link>
         {NAV.map(({ href, label }) => (
           <Link
