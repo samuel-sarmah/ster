@@ -8,6 +8,7 @@ import { Worker } from "bullmq";
 import { createClient } from "@supabase/supabase-js";
 import { getAdapter } from "../lib/social";
 import type { Platform } from "../lib/supabase/types";
+import { decryptToken } from "../lib/crypto/token-cipher";
 
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
 
@@ -46,7 +47,9 @@ const worker = new Worker<ViewTrackingJob>(
 
     const s = submission as any;
     const adapter = getAdapter(s.platform as Platform);
-    const accessToken = s.social_accounts?.access_token ?? "";
+    const accessToken = s.social_accounts?.access_token
+      ? decryptToken(s.social_accounts.access_token)
+      : "";
     const postId = s.post_platform_id;
 
     if (!postId) throw new Error("No post_platform_id on submission");
@@ -95,7 +98,7 @@ const worker = new Worker<ViewTrackingJob>(
         if (!existingFlag?.length) {
           await supabase.from("admin_flags").insert({
             submission_id,
-            flagged_by: submission.creator_id, // system — use service role user in prod
+            flagged_by: null, // system-generated velocity flag, not a user report
             reason: `Velocity anomaly: ${Math.round(viewsPerHour).toLocaleString()} views/hour`,
           });
         }

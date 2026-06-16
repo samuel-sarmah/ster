@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getAdapter } from "@/lib/social";
 import { NextResponse } from "next/server";
 import type { Platform } from "@/lib/supabase/types";
+import { encryptToken } from "@/lib/crypto/token-cipher";
 
 export async function GET(
   request: Request,
@@ -36,8 +37,8 @@ export async function GET(
       platform: platform as Platform,
       platform_user_id: tokenData.user_id,
       handle: tokenData.handle,
-      access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token ?? null,
+      access_token: encryptToken(tokenData.access_token),
+      refresh_token: tokenData.refresh_token ? encryptToken(tokenData.refresh_token) : null,
       token_expires_at: tokenData.expires_in
         ? new Date(Date.now() + tokenData.expires_in * 1000).toISOString()
         : null,
