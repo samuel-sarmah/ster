@@ -2,10 +2,17 @@ import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ConnectPayoutButton } from "./connect-payout-button";
 
 export default async function CreatorDashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("stripe_account_id")
+    .eq("id", user!.id)
+    .single();
 
   const { data: earnings } = await supabase
     .from("earnings")
@@ -37,6 +44,23 @@ export default async function CreatorDashboardPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <h1 className="text-2xl font-bold">Creator dashboard</h1>
+
+      {!profile?.stripe_account_id ? (
+        <div className="border rounded-lg p-4 flex items-center justify-between bg-muted/20">
+          <div>
+            <div className="font-medium">Payout account not connected</div>
+            <div className="text-sm text-muted-foreground">
+              Connect your Stripe account to receive payouts.
+            </div>
+          </div>
+          <ConnectPayoutButton />
+        </div>
+      ) : (
+        <div className="border rounded-lg p-4 flex items-center justify-between">
+          <div className="font-medium">Payout account connected</div>
+          <Badge>Connected</Badge>
+        </div>
+      )}
 
       <div className="grid grid-cols-3 gap-4">
         <Card>
