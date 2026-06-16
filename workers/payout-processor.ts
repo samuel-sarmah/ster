@@ -14,7 +14,7 @@ const PAYOUT_THRESHOLD_USD = 10;
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SECRET_KEY!
 );
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
