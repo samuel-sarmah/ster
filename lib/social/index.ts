@@ -22,20 +22,24 @@ export interface SocialAdapter {
 
 export const tiktokAdapter: SocialAdapter = {
   fetchViews: async (postId, _token) => {
-    // TikTok Video API v2
-    const res = await fetch(
-      `https://open.tiktokapis.com/v2/video/query/?fields=id,statistics`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${_token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ filters: { video_ids: [postId] } }),
-      }
-    );
-    const data = await res.json();
-    return data?.data?.videos?.[0]?.statistics?.play_count ?? 0;
+    try {
+      // TikTok Video API v2
+      const res = await fetch(
+        `https://open.tiktokapis.com/v2/video/query/?fields=id,statistics`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ filters: { video_ids: [postId] } }),
+        }
+      );
+      const data = await res.json();
+      return data?.data?.videos?.[0]?.statistics?.play_count ?? 0;
+    } catch (err) {
+      throw new Error(`[tiktok] fetchViews failed for post ${postId}: ${err instanceof Error ? err.message : String(err)}`);
+    }
   },
   extractPostId: (url) => {
     const match = url.match(/video\/(\d+)/);
@@ -76,11 +80,15 @@ export const tiktokAdapter: SocialAdapter = {
 
 export const instagramAdapter: SocialAdapter = {
   fetchViews: async (postId, token) => {
-    const res = await fetch(
-      `https://graph.instagram.com/${postId}?fields=video_views,plays&access_token=${token}`
-    );
-    const data = await res.json();
-    return data.video_views ?? data.plays ?? 0;
+    try {
+      const res = await fetch(
+        `https://graph.instagram.com/${postId}?fields=video_views,plays&access_token=${token}`
+      );
+      const data = await res.json();
+      return data.video_views ?? data.plays ?? 0;
+    } catch (err) {
+      throw new Error(`[instagram] fetchViews failed for post ${postId}: ${err instanceof Error ? err.message : String(err)}`);
+    }
   },
   extractPostId: (url) => {
     const match = url.match(/(?:reel|p)\/([A-Za-z0-9_-]+)/);
@@ -118,11 +126,15 @@ export const instagramAdapter: SocialAdapter = {
 
 export const youtubeAdapter: SocialAdapter = {
   fetchViews: async (videoId, _token) => {
-    const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${process.env.YOUTUBE_API_KEY}`
-    );
-    const data = await res.json();
-    return parseInt(data.items?.[0]?.statistics?.viewCount ?? "0", 10);
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${process.env.YOUTUBE_API_KEY}`
+      );
+      const data = await res.json();
+      return parseInt(data.items?.[0]?.statistics?.viewCount ?? "0", 10);
+    } catch (err) {
+      throw new Error(`[youtube] fetchViews failed for video ${videoId}: ${err instanceof Error ? err.message : String(err)}`);
+    }
   },
   extractPostId: (url) => {
     const match = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
@@ -171,12 +183,16 @@ export const youtubeAdapter: SocialAdapter = {
 
 export const xAdapter: SocialAdapter = {
   fetchViews: async (tweetId, token) => {
-    const res = await fetch(
-      `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=public_metrics`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    return data.data?.public_metrics?.impression_count ?? 0;
+    try {
+      const res = await fetch(
+        `https://api.twitter.com/2/tweets/${tweetId}?tweet.fields=public_metrics`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = await res.json();
+      return data.data?.public_metrics?.impression_count ?? 0;
+    } catch (err) {
+      throw new Error(`[x] fetchViews failed for tweet ${tweetId}: ${err instanceof Error ? err.message : String(err)}`);
+    }
   },
   extractPostId: (url) => {
     const match = url.match(/status\/(\d+)/);

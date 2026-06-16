@@ -25,7 +25,10 @@ export async function POST(request: Request) {
   if (event.type === "payment_intent.succeeded") {
     const pi = event.data.object as Stripe.PaymentIntent;
     const campaignId = pi.metadata.campaign_id;
-    if (!campaignId) return NextResponse.json({ ok: true });
+    if (!campaignId) {
+      console.warn(`[stripe-webhook] payment_intent.succeeded missing campaign_id metadata, pi=${pi.id}`);
+      return NextResponse.json({ ok: true });
+    }
 
     await supabase
       .from("campaigns")
@@ -37,7 +40,10 @@ export async function POST(request: Request) {
   if (event.type === "payment_intent.payment_failed") {
     const pi = event.data.object as Stripe.PaymentIntent;
     const campaignId = pi.metadata.campaign_id;
-    if (!campaignId) return NextResponse.json({ ok: true });
+    if (!campaignId) {
+      console.warn(`[stripe-webhook] payment_intent.payment_failed missing campaign_id metadata, pi=${pi.id}`);
+      return NextResponse.json({ ok: true });
+    }
 
     // Clear payment intent so brand can retry
     await supabase
