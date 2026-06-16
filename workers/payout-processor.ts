@@ -58,15 +58,20 @@ const worker = new Worker<PayoutJob>(
       }
 
       try {
-        const transfer = await stripe.transfers.create({
-          amount: Math.round(Number(earning.amount_usd) * 100),
-          currency: "usd",
-          destination: stripeAccountId,
-          metadata: {
-            submission_id: earning.submission_id,
-            earning_id: earning.id,
+        const transfer = await stripe.transfers.create(
+          {
+            amount: Math.round(Number(earning.amount_usd) * 100),
+            currency: "usd",
+            destination: stripeAccountId,
+            metadata: {
+              submission_id: earning.submission_id,
+              earning_id: earning.id,
+            },
           },
-        });
+          // Dedupe: if the process dies after this call succeeds but before
+          // the earnings row is marked paid, the next run won't double-pay.
+          { idempotencyKey: `payout-${earning.id}` }
+        );
 
         // Mark earning as paid
         await supabase
