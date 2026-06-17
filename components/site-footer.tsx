@@ -62,7 +62,7 @@ export function SiteFooter() {
       ]}
       copyright={`© ${new Date().getFullYear()} Sterz. All rights reserved.`}
       legalLinks={[
-        { name: "Terms", href: "/" },
+        { name: "Terms", href: "/terms" },
         { name: "Privacy", href: "/" },
       ]}
     />
