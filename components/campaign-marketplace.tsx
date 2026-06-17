@@ -28,7 +28,7 @@ export function CampaignMarketplace({
 }: CampaignMarketplaceProps) {
   const [query, setQuery] = useState("");
   const [platform, setPlatform] = useState<Platform>("all");
-  const [selected, setSelected] = useState<CampaignCardProps | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const filtered = initialCampaigns
@@ -39,6 +39,8 @@ export function CampaignMarketplace({
         c.title.toLowerCase().includes(query.toLowerCase()) ||
         c.brand_name.toLowerCase().includes(query.toLowerCase()),
     );
+
+  const selected = selectedIndex != null ? filtered[selectedIndex] ?? null : null;
 
   return (
     <section id="marketplace" className="scroll-mt-20 border-b border-border/60">
@@ -79,12 +81,12 @@ export function CampaignMarketplace({
         <div className="pb-14 sm:pb-18 lg:pb-22">
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((c) => (
+              {filtered.map((c, i) => (
                 <CampaignCard
                   key={c.id}
                   {...c}
                   onSelect={() => {
-                    setSelected(c);
+                    setSelectedIndex(i);
                     setDialogOpen(true);
                   }}
                 />
@@ -108,6 +110,16 @@ export function CampaignMarketplace({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         isAuthenticated={isAuthenticated}
+        hasPrev={selectedIndex != null && selectedIndex > 0}
+        hasNext={selectedIndex != null && selectedIndex < filtered.length - 1}
+        onPrev={() =>
+          setSelectedIndex((i) => (i != null && i > 0 ? i - 1 : i))
+        }
+        onNext={() =>
+          setSelectedIndex((i) =>
+            i != null && i < filtered.length - 1 ? i + 1 : i,
+          )
+        }
       />
     </section>
   );
