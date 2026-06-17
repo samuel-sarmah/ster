@@ -1,6 +1,18 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import {
+  AtSign,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Gift,
+  Hash,
+  Megaphone,
+  Users,
+  Video,
+} from "lucide-react";
 import {
   Dialog,
   DialogClose,
@@ -12,7 +24,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/utils";
 import type { CampaignCardProps } from "@/components/campaign-card";
+
+/** Where the "must-read brief" links to. Repoint when the terms page lands. */
+const BRIEF_TERMS_URL = "/terms";
 
 const PLATFORM_LABELS: Record<string, string> = {
   tiktok: "TikTok",
@@ -35,6 +51,10 @@ interface CampaignDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isAuthenticated: boolean;
+  onPrev?: () => void;
+  onNext?: () => void;
+  hasPrev?: boolean;
+  hasNext?: boolean;
 }
 
 export function CampaignDetailDialog({
@@ -42,15 +62,116 @@ export function CampaignDetailDialog({
   open,
   onOpenChange,
   isAuthenticated,
+  onPrev,
+  onNext,
+  hasPrev = false,
+  hasNext = false,
 }: CampaignDetailDialogProps) {
+  // Arrow-key navigation between campaigns while the dialog is open.
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft" && hasPrev) onPrev?.();
+      if (e.key === "ArrowRight" && hasNext) onNext?.();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, hasPrev, hasNext, onPrev, onNext]);
+
   if (!campaign) return null;
 
   const remaining = campaign.total_budget - campaign.spent_budget;
   const isDemo = campaign.id.startsWith("demo-");
 
+  const requirements = [
+    {
+      icon: Users,
+      label: "Audience restrictions",
+      detail: "Your audience must meet the campaign's targeting rules.",
+    },
+    {
+      icon: FileText,
+      label: "Read the brief",
+      detail: (
+        <>
+          Review the{" "}
+          <Link
+            href={BRIEF_TERMS_URL}
+            className="font-medium text-foreground underline underline-offset-2"
+          >
+            must-read brief &amp; terms
+          </Link>{" "}
+          before posting.
+        </>
+      ),
+    },
+    {
+      icon: Hash,
+      label: "Tag every video",
+      detail: "Add the required campaign tag under each video you post.",
+    },
+    {
+      icon: Video,
+      label: "High production quality",
+      detail: "Clear audio, good lighting, and clean edits are expected.",
+    },
+    {
+      icon: AtSign,
+      label: "Add sterz in bio",
+      detail: "Put sterz in your bio so people can join directly.",
+    },
+    {
+      icon: Megaphone,
+      label: "Mention the brand",
+      detail: "Call out the brand directly within the video.",
+    },
+  ];
+
+  const benefits = [
+    "Get paid per verified view — the more it performs, the more you earn.",
+    "Work with real brands and grow your creator portfolio.",
+    "Apply in minutes and post on your own schedule.",
+  ];
+
+  const ArrowButton = ({
+    side,
+    onClick,
+    disabled,
+  }: {
+    side: "left" | "right";
+    onClick?: () => void;
+    disabled: boolean;
+  }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={side === "left" ? "Previous campaign" : "Next campaign"}
+      className={cn(
+        // Anchored just outside the modal card's left/right edges (the popup
+        // is the positioned ancestor), sized large for easy tapping.
+        "absolute top-1/2 z-50 hidden size-16 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/25 disabled:pointer-events-none disabled:opacity-0 md:flex",
+        side === "left" ? "right-full mr-5" : "left-full ml-5",
+      )}
+    >
+      {side === "left" ? (
+        <ChevronLeft className="size-9" />
+      ) : (
+        <ChevronRight className="size-9" />
+      )}
+    </button>
+  );
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent
+        overlayClassName="bg-black/95 supports-backdrop-filter:backdrop-blur-none"
+        className="flex max-h-[90vh] flex-col overflow-visible sm:max-w-lg"
+      >
+        <ArrowButton side="left" onClick={onPrev} disabled={!hasPrev} />
+        <ArrowButton side="right" onClick={onNext} disabled={!hasNext} />
+
+        <div className="flex min-h-0 flex-col gap-6 overflow-y-auto pr-1">
         <DialogHeader>
           <p className="text-sm font-semibold text-muted-foreground">
             {campaign.brand_name}
@@ -97,22 +218,36 @@ export function CampaignDetailDialog({
           ))}
         </div>
 
-        <div className="rounded-lg bg-muted/50 p-4">
-          <p className="mb-2 text-sm font-semibold">How to join</p>
-          <ol className="list-decimal space-y-1 pl-4 text-sm text-muted-foreground">
-            <li>Create a free creator account</li>
-            <li>Connect your social accounts</li>
-            <li>Apply to the campaign and start posting</li>
-            <li>Get paid per verified view</li>
-          </ol>
+        <div className="rounded-lg border p-4">
+          <p className="mb-3 text-sm font-semibold">Requirements</p>
+          <ul className="space-y-3">
+            {requirements.map(({ icon: Icon, label, detail }) => (
+              <li key={label} className="flex gap-3">
+                <Icon className="mt-0.5 size-4 shrink-0 text-accent" />
+                <div className="text-sm">
+                  <p className="font-medium text-foreground">{label}</p>
+                  <p className="text-muted-foreground">{detail}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <DialogFooter>
-          <DialogClose
-            render={<Button variant="outline" />}
-          >
-            Close
-          </DialogClose>
+        <div className="rounded-lg bg-muted/50 p-4">
+          <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
+            <Gift className="size-4 text-accent" />
+            Benefits of joining
+          </p>
+          <ul className="list-disc space-y-1 pl-4 text-sm text-muted-foreground">
+            {benefits.map((b) => (
+              <li key={b}>{b}</li>
+            ))}
+          </ul>
+        </div>
+        </div>
+
+        <DialogFooter className="pt-2">
+          <DialogClose render={<Button variant="outline" />}>Close</DialogClose>
           {isAuthenticated ? (
             <Link
               href={isDemo ? "/creator/campaigns" : `/campaigns/${campaign.id}`}
