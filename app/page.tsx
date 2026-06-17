@@ -151,6 +151,14 @@ const PLACEHOLDER_IMAGE_QUERIES = [
 export default async function Home() {
   const supabase = await createClient();
 
+  let user = null;
+  try {
+    const { data: userData } = await supabase.auth.getUser();
+    user = userData.user;
+  } catch {
+    // Supabase unreachable — render the marketplace for an anonymous visitor
+  }
+
   const { data } = await supabase
     .from("campaigns")
     .select(
@@ -193,7 +201,10 @@ export default async function Home() {
 
   return (
     <main className="section-dark bg-black">
-      <CampaignMarketplace initialCampaigns={campaigns} />
+      <CampaignMarketplace
+        initialCampaigns={campaigns}
+        isAuthenticated={!!user}
+      />
 
       <section id="testimonials" className="scroll-mt-20">
         <Testimonial8
