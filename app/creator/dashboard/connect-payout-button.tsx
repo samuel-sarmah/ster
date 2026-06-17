@@ -14,7 +14,7 @@ export function ConnectPayoutButton() {
       const res = await fetch("/api/stripe/connect/create", { method: "POST" });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Could not start payout setup");
+        setError(data.detail ?? data.error ?? "Could not start payout setup");
         setLoading(false);
         return;
       }

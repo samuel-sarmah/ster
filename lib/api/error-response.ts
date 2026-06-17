@@ -6,5 +6,13 @@ import { NextResponse } from "next/server";
  */
 export function serverError(error: unknown, context: string) {
   console.error(`[${context}]`, error);
-  return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+  const body: { error: string; detail?: string } = {
+    error: "Something went wrong",
+  };
+  // In non-production, include the real message so failures are diagnosable
+  // from the client without digging through server logs.
+  if (process.env.NODE_ENV !== "production") {
+    body.detail = error instanceof Error ? error.message : String(error);
+  }
+  return NextResponse.json(body, { status: 500 });
 }
