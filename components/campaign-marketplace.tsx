@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CampaignCard, type CampaignCardProps } from "@/components/campaign-card";
+import { CampaignDetailDialog } from "@/components/campaign-detail-dialog";
 import { cn } from "@/lib/utils";
 
 type Platform = "all" | "tiktok" | "instagram" | "youtube" | "x";
@@ -18,11 +19,17 @@ const PLATFORMS: { value: Platform; label: string }[] = [
 
 interface CampaignMarketplaceProps {
   initialCampaigns: CampaignCardProps[];
+  isAuthenticated?: boolean;
 }
 
-export function CampaignMarketplace({ initialCampaigns }: CampaignMarketplaceProps) {
+export function CampaignMarketplace({
+  initialCampaigns,
+  isAuthenticated = false,
+}: CampaignMarketplaceProps) {
   const [query, setQuery] = useState("");
   const [platform, setPlatform] = useState<Platform>("all");
+  const [selected, setSelected] = useState<CampaignCardProps | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const filtered = initialCampaigns
     .filter((c) => platform === "all" || c.platforms.includes(platform))
@@ -73,7 +80,14 @@ export function CampaignMarketplace({ initialCampaigns }: CampaignMarketplacePro
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((c) => (
-                  <CampaignCard key={c.id} {...c} />
+                <CampaignCard
+                  key={c.id}
+                  {...c}
+                  onSelect={() => {
+                    setSelected(c);
+                    setDialogOpen(true);
+                  }}
+                />
               ))}
             </div>
           ) : (
@@ -88,6 +102,13 @@ export function CampaignMarketplace({ initialCampaigns }: CampaignMarketplacePro
           )}
         </div>
       </div>
+
+      <CampaignDetailDialog
+        campaign={selected}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        isAuthenticated={isAuthenticated}
+      />
     </section>
   );
 }

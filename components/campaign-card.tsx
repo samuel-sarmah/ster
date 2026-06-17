@@ -10,6 +10,8 @@ export interface CampaignCardProps {
   ends_at: string | null;
   imageUrl?: string | null;
   className?: string;
+  /** When provided, the card opens this handler instead of navigating. */
+  onSelect?: () => void;
 }
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -41,15 +43,15 @@ export function CampaignCard({
   brand_name,
   imageUrl,
   className,
+  onSelect,
 }: CampaignCardProps) {
   const initial = brand_name.charAt(0).toUpperCase();
   const remaining = total_budget - spent_budget;
 
-  return (
-    <a
-      href={`/campaigns/${id}`}
-      className={`flex flex-col overflow-hidden rounded-2xl bg-muted ${className ?? ""}`}
-    >
+  const cardClassName = `flex flex-col overflow-hidden rounded-2xl bg-muted text-left ${className ?? ""}`;
+
+  const inner = (
+    <>
       {imageUrl ? (
         <img
           src={imageUrl}
@@ -90,6 +92,20 @@ export function CampaignCard({
           </span>
         </div>
       </div>
+    </>
+  );
+
+  if (onSelect) {
+    return (
+      <button type="button" onClick={onSelect} className={cardClassName}>
+        {inner}
+      </button>
+    );
+  }
+
+  return (
+    <a href={`/campaigns/${id}`} className={cardClassName}>
+      {inner}
     </a>
   );
 }
