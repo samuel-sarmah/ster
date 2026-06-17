@@ -4,6 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ConnectPayoutButton } from "./connect-payout-button";
 
+// Disable the shared Card's hover lift/shadow so the dashboard stat cards stay
+// still instead of "wiggling" on mouse-over.
+const STATIC_CARD = "hover:translate-y-0 hover:shadow-[var(--shadow-soft)]";
+
 export default async function CreatorDashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -63,7 +67,7 @@ export default async function CreatorDashboardPage() {
       )}
 
       <div className="grid grid-cols-3 gap-4">
-        <Card>
+        <Card className={STATIC_CARD}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle>
           </CardHeader>
@@ -71,7 +75,7 @@ export default async function CreatorDashboardPage() {
             <div className="text-3xl font-bold">${pending.toFixed(2)}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className={STATIC_CARD}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Confirmed</CardTitle>
           </CardHeader>
@@ -79,7 +83,7 @@ export default async function CreatorDashboardPage() {
             <div className="text-3xl font-bold">${confirmed.toFixed(2)}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className={STATIC_CARD}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Paid out</CardTitle>
           </CardHeader>
