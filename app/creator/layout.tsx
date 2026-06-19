@@ -7,7 +7,7 @@ const NAV = [
   { href: "/creator/campaigns", label: "Campaigns" },
   { href: "/creator/submissions", label: "Submissions" },
   { href: "/creator/settings/socials", label: "Socials" },
-  { href: "/creator/settings/account", label: "Account" },
+  { href: "/creator/settings/account", label: "Settings" },
 ];
 
 export default async function CreatorLayout({ children }: { children: React.ReactNode }) {
