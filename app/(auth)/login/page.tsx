@@ -27,17 +27,45 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  // Supabase returns a generic "Invalid login credentials" both for a wrong
+  // password and for an unconfirmed email, so offer a resend path on failure.
+  const [canResend, setCanResend] = useState(false);
+  const [resendNotice, setResendNotice] = useState<string | null>(null);
+
+  async function handleResendConfirmation() {
+    if (!email) {
+      setError("Enter your email above first, then resend.");
+      return;
+    }
+    setLoading(true);
+    setResendNotice(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.resend({ type: "signup", email });
+    setLoading(false);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setError(null);
+    setCanResend(false);
+    setResendNotice(`Confirmation email sent to ${email}. Check your inbox, then sign in.`);
+  }
 
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setResendNotice(null);
+    setCanResend(false);
 
     const supabase = createClient();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setError(error.message);
+      // Offer to resend confirmation — the most common cause of this error for
+      // a freshly created account is an unconfirmed email.
+      setCanResend(true);
       setLoading(false);
       return;
     }
@@ -45,6 +73,7 @@ function LoginContent() {
     if (!data.user?.email_confirmed_at) {
       await supabase.auth.signOut();
       setError("Please confirm your email before signing in. Check your inbox.");
+      setCanResend(true);
       setLoading(false);
       return;
     }
@@ -129,6 +158,19 @@ function LoginContent() {
             </div>
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
+          {canResend && (
+            <button
+              type="button"
+              onClick={handleResendConfirmation}
+              disabled={loading}
+              className="text-sm text-primary underline disabled:opacity-50"
+            >
+              Resend confirmation email
+            </button>
+          )}
+          {resendNotice && (
+            <p className="text-sm text-muted-foreground">{resendNotice}</p>
+          )}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Signing in…" : "Sign in"}
           </Button>
