@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { getSiteUrl } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,7 +48,12 @@ export default function SignupPage() {
       password,
       options: {
         data: { role, display_name: displayName },
-        emailRedirectTo: `${window.location.origin}/callback`,
+        // Land on the login page of the deployed site after the user clicks
+        // the confirmation link. Supabase's verify endpoint marks the email
+        // confirmed before this redirect, so the user can sign in straight
+        // away. Using the canonical site URL (not window.origin) keeps the
+        // link off localhost when signing up during local dev.
+        emailRedirectTo: `${getSiteUrl()}/login`,
       },
     });
 
