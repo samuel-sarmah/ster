@@ -24,7 +24,7 @@ export function SiteFooter() {
       className=""
       logo={{
         url: "/",
-        src: "/favicon.ico",
+        src: "/logo.svg",
         alt: "Sterz",
         title: "Sterz",
       }}

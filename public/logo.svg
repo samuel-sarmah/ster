@@ -1,0 +1,28 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sterz">
+  <defs>
+    <linearGradient id="sterzTile" x1="6" y1="3" x2="34" y2="37" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF9D4D"/>
+      <stop offset="0.55" stop-color="#F0701E"/>
+      <stop offset="1" stop-color="#C8430F"/>
+    </linearGradient>
+    <linearGradient id="sterzSheen" x1="8" y1="5" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#sterzTile)"/>
+  <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#sterzSheen)"/>
+  <!-- Bold "S" monogram -->
+  <path
+    d="M26.5 14.2c0-2.7-2.9-4.4-6.5-4.4s-6.6 1.9-6.6 4.8c0 2.7 2.3 4 6.6 4.9s6.6 1.9 6.6 4.7c0 2.9-3 4.8-6.7 4.8s-6.6-1.7-6.6-4.4"
+    stroke="#ffffff"
+    stroke-width="5.6"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <!-- Play notch cut from the centre of the S — the "clip" cue -->
+  <path
+    d="M18.7 17.6l3.7 1.98c.5.27.5.99 0 1.26l-3.7 1.98c-.48.26-1.04-.09-1.04-.63v-3.96c0-.54.56-.89 1.04-.63z"
+    fill="url(#sterzTile)"
+  />
+</svg>

@@ -19,7 +19,7 @@ export async function SiteHeader() {
       className="sticky top-0 z-30 border-b border-border/80 bg-background py-3"
       logo={{
         url: "/",
-        src: "/favicon.ico",
+        src: "/logo.svg",
         alt: "Sterz logo",
         title: "Sterz",
       }}

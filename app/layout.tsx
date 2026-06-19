@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sterz — Performance Creator Marketing",
   description: "Brands deposit escrow. Creators post. Views verified. Creators get paid.",
+  icons: { icon: "/logo.svg" },
 };
 
 export default function RootLayout({
