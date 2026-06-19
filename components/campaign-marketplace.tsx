@@ -20,11 +20,13 @@ const PLATFORMS: { value: Platform; label: string }[] = [
 interface CampaignMarketplaceProps {
   initialCampaigns: CampaignCardProps[];
   isAuthenticated?: boolean;
+  userRole?: string | null;
 }
 
 export function CampaignMarketplace({
   initialCampaigns,
   isAuthenticated = false,
+  userRole = null,
 }: CampaignMarketplaceProps) {
   const [query, setQuery] = useState("");
   const [platform, setPlatform] = useState<Platform>("all");
@@ -110,6 +112,7 @@ export function CampaignMarketplace({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         isAuthenticated={isAuthenticated}
+        userRole={userRole}
         hasPrev={selectedIndex != null && selectedIndex > 0}
         hasNext={selectedIndex != null && selectedIndex < filtered.length - 1}
         onPrev={() =>

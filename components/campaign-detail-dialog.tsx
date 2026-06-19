@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import {
   AtSign,
+  Check,
   ChevronLeft,
   ChevronRight,
   FileText,
   Gift,
   Hash,
+  Loader2,
   Megaphone,
   Users,
   Video,
@@ -25,6 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
+import { joinCampaign } from "@/app/campaigns/actions";
 import type { CampaignCardProps } from "@/components/campaign-card";
 
 /** Where the "must-read brief" links to. Repoint when the terms page lands. */
@@ -51,22 +54,32 @@ interface CampaignDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isAuthenticated: boolean;
+  userRole?: string | null;
   onPrev?: () => void;
   onNext?: () => void;
   hasPrev?: boolean;
   hasNext?: boolean;
 }
 
+type JoinState =
+  | { status: "idle" }
+  | { status: "joined"; alreadyApplied: boolean }
+  | { status: "error"; message: string };
+
 export function CampaignDetailDialog({
   campaign,
   open,
   onOpenChange,
   isAuthenticated,
+  userRole = null,
   onPrev,
   onNext,
   hasPrev = false,
   hasNext = false,
 }: CampaignDetailDialogProps) {
+  const [joinState, setJoinState] = useState<JoinState>({ status: "idle" });
+  const [isPending, startTransition] = useTransition();
+
   // Arrow-key navigation between campaigns while the dialog is open.
   useEffect(() => {
     if (!open) return;
@@ -78,10 +91,27 @@ export function CampaignDetailDialog({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, hasPrev, hasNext, onPrev, onNext]);
 
+  // Reset the join state whenever a different campaign is shown.
+  useEffect(() => {
+    setJoinState({ status: "idle" });
+  }, [campaign?.id]);
+
   if (!campaign) return null;
 
   const remaining = campaign.total_budget - campaign.spent_budget;
   const isDemo = campaign.id.startsWith("demo-");
+  const campaignId = campaign.id;
+
+  function handleJoin() {
+    startTransition(async () => {
+      const result = await joinCampaign(campaignId);
+      if (result.ok) {
+        setJoinState({ status: "joined", alreadyApplied: result.alreadyApplied });
+      } else {
+        setJoinState({ status: "error", message: result.message });
+      }
+    });
+  }
 
   const requirements = [
     {
@@ -173,8 +203,13 @@ export function CampaignDetailDialog({
 
         <div className="flex min-h-0 flex-col gap-6 overflow-y-auto pr-1">
         <DialogHeader>
-          <p className="text-sm font-semibold text-muted-foreground">
+          <p className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
             {campaign.brand_name}
+            {isDemo ? (
+              <span className="rounded-full border border-border/60 px-2 py-0.5 text-[11px] font-medium">
+                Sample
+              </span>
+            ) : null}
           </p>
           <DialogTitle className="text-xl">{campaign.title}</DialogTitle>
           {campaign.description ? (
@@ -246,25 +281,70 @@ export function CampaignDetailDialog({
         </div>
         </div>
 
+        {/* Demo cards are illustrative — be upfront rather than faking a join. */}
+        {isDemo ? (
+          <p className="rounded-lg border border-border/60 bg-muted/40 p-3 text-sm text-muted-foreground">
+            This is a sample campaign that shows how the marketplace works. Real
+            brand campaigns appear here and can be joined in one click.
+          </p>
+        ) : joinState.status === "joined" ? (
+          <div className="flex items-start gap-2.5 rounded-lg border border-accent/30 bg-accent/10 p-3 text-sm">
+            <Check className="mt-0.5 size-4 shrink-0 text-accent" />
+            <div>
+              <p className="font-semibold text-foreground">
+                {joinState.alreadyApplied
+                  ? "You've already joined this campaign"
+                  : "You're in! Application submitted"}
+              </p>
+              <p className="text-muted-foreground">
+                The brand will review your application. Track its status from
+                your dashboard.
+              </p>
+            </div>
+          </div>
+        ) : joinState.status === "error" ? (
+          <p className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+            {joinState.message}
+          </p>
+        ) : null}
+
         <DialogFooter className="pt-2">
           <DialogClose render={<Button variant="outline" />}>Close</DialogClose>
-          {isAuthenticated ? (
+
+          {!isAuthenticated ? (
             <Link
-              href={isDemo ? "/creator/campaigns" : `/campaigns/${campaign.id}`}
+              href={isDemo ? "/signup" : `/signup?redirect=/campaigns/${campaignId}`}
               className={buttonVariants()}
             >
-              {isDemo ? "Browse live campaigns" : "View & apply"}
+              Sign up to join
             </Link>
+          ) : isDemo ? (
+            // No real row to join — send them to the live (real) campaign list.
+            <Link href="/creator/campaigns" className={buttonVariants()}>
+              See live campaigns
+            </Link>
+          ) : joinState.status === "joined" ? (
+            <Link href="/creator/dashboard" className={buttonVariants()}>
+              Go to my dashboard
+            </Link>
+          ) : userRole === "brand" ? (
+            <Link href="/brand/campaigns" className={buttonVariants()}>
+              Go to your campaigns
+            </Link>
+          ) : userRole === "creator" || userRole === null ? (
+            <Button onClick={handleJoin} disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Joining…
+                </>
+              ) : (
+                "Join campaign"
+              )}
+            </Button>
           ) : (
-            <Link
-              href={
-                isDemo
-                  ? "/signup"
-                  : `/signup?redirect=/campaigns/${campaign.id}`
-              }
-              className={buttonVariants()}
-            >
-              Sign up to apply
+            <Link href={`/campaigns/${campaignId}`} className={buttonVariants()}>
+              View campaign
             </Link>
           )}
         </DialogFooter>

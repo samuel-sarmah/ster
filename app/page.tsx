@@ -204,6 +204,7 @@ export default async function Home() {
       <CampaignMarketplace
         initialCampaigns={campaigns}
         isAuthenticated={!!user}
+        userRole={(user?.user_metadata?.role as string | undefined) ?? null}
       />
 
       <section id="testimonials" className="scroll-mt-20">
