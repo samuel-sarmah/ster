@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 const NAV = [
   { href: "/brand/dashboard", label: "Dashboard" },
   { href: "/brand/campaigns", label: "Campaigns" },
+  { href: "/brand/settings/account", label: "Account" },
 ];
 
 export default async function BrandLayout({ children }: { children: React.ReactNode }) {
