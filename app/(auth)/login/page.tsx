@@ -71,7 +71,7 @@ function LoginContent() {
   }
 
   return (
-    <Card>
+    <Card className="hover:translate-y-0 hover:shadow-[var(--shadow-soft)]">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Sterz</CardTitle>
         <CardDescription>Sign in to your account</CardDescription>
