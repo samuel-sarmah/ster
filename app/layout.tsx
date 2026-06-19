@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { SiteChrome } from "@/components/site-chrome";
 import "./globals.css";
 
 const inter = Inter({
@@ -30,9 +31,9 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SiteHeader />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
+        <SiteChrome header={<SiteHeader />} footer={<SiteFooter />}>
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );
