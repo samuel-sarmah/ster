@@ -69,7 +69,7 @@ export default function SignupPage() {
 
   if (emailSent) {
     return (
-      <Card>
+      <Card className="hover:translate-y-0 hover:shadow-[var(--shadow-soft)]">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Check your email</CardTitle>
           <CardDescription>
@@ -87,7 +87,7 @@ export default function SignupPage() {
   }
 
   return (
-    <Card>
+    <Card className="hover:translate-y-0 hover:shadow-[var(--shadow-soft)]">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Join Sterz</CardTitle>
         <CardDescription>Create your account</CardDescription>
