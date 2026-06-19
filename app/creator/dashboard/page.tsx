@@ -27,6 +27,22 @@ export default async function CreatorDashboardPage() {
     .eq("creator_id", user!.id)
     .order("updated_at", { ascending: false });
 
+  // Campaigns this creator has joined (applied to), newest first.
+  const { data: joined } = await supabase
+    .from("campaign_applications")
+    .select(`
+      status, applied_at,
+      campaigns!inner(id, title, platforms, target_cpm)
+    `)
+    .eq("creator_id", user!.id)
+    .order("applied_at", { ascending: false });
+
+  const APP_VARIANT: Record<string, "default" | "secondary" | "outline"> = {
+    approved: "default",
+    pending: "secondary",
+    rejected: "outline",
+  };
+
   const pending = (earnings ?? [])
     .filter((e: any) => e.status === "pending")
     .reduce((sum, e: any) => sum + Number(e.amount_usd), 0);
@@ -91,6 +107,58 @@ export default async function CreatorDashboardPage() {
             <div className="text-3xl font-bold">${paid.toFixed(2)}</div>
           </CardContent>
         </Card>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-semibold">Campaigns you&apos;ve joined</h2>
+          <Link href="/creator/campaigns" className="text-sm underline">
+            Find more
+          </Link>
+        </div>
+
+        {(joined ?? []).length === 0 ? (
+          <div className="text-muted-foreground text-sm py-8 text-center border rounded-lg">
+            You haven&apos;t joined any campaigns yet.{" "}
+            <Link href="/creator/campaigns" className="underline">
+              Browse campaigns
+            </Link>{" "}
+            and apply.
+          </div>
+        ) : (
+          <div className="border rounded-lg divide-y">
+            {(joined as any[]).map((j) => (
+              <div
+                key={j.campaigns.id}
+                className="p-4 flex items-center justify-between gap-3"
+              >
+                <div className="min-w-0">
+                  <Link
+                    href={`/creator/campaigns/${j.campaigns.id}`}
+                    className="font-medium text-sm hover:underline"
+                  >
+                    {j.campaigns.title}
+                  </Link>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    {(j.campaigns.platforms as string[]).map((p) => (
+                      <Badge key={p} variant="outline" className="capitalize text-xs">
+                        {p}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="text-sm text-muted-foreground">
+                    ${Number(j.campaigns.target_cpm).toFixed(2)} CPM
+                  </span>
+                  <Badge variant={APP_VARIANT[j.status] ?? "secondary"}>
+                    {j.status}
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div>
