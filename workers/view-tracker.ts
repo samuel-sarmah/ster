@@ -13,7 +13,9 @@ import { decryptToken } from "../lib/crypto/token-cipher";
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
 
 const VELOCITY_THRESHOLD_VIEWS_PER_HOUR = 500_000;
-const PAYOUT_CONFIRMATION_THRESHOLD_VIEWS = 10_000;
+// The payout-confirmation threshold and the CPM→amount math (capped at the
+// campaign's remaining escrow budget) now live in the record_submission_views()
+// DB function so the snapshot + earnings write happen in one transaction.
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -56,11 +58,14 @@ const worker = new Worker<ViewTrackingJob>(
 
     const viewCount = await adapter.fetchViews(postId, accessToken);
 
-    // Insert snapshot
-    await supabase.from("view_snapshots").insert({
-      submission_id,
-      view_count: viewCount,
+    // Snapshot the count and create/update the (budget-capped) earnings row in
+    // one transaction, under a campaign lock so concurrent submissions can't
+    // overspend the escrow. See migration 007.
+    const { error: recordErr } = await supabase.rpc("record_submission_views", {
+      p_submission_id: submission_id,
+      p_view_count: viewCount,
     });
+    if (recordErr) throw recordErr;
 
     // Update submission to tracking if still approved
     if (submission.status === "approved") {
@@ -103,31 +108,6 @@ const worker = new Worker<ViewTrackingJob>(
           });
         }
       }
-    }
-
-    // Update earnings
-    const cpm = Number(s.campaigns?.target_cpm ?? 0);
-    const amountUsd = (viewCount / 1000) * cpm;
-
-    const { data: existingEarnings } = await supabase
-      .from("earnings")
-      .select("id, verified_views")
-      .eq("submission_id", submission_id)
-      .single();
-
-    if (existingEarnings) {
-      const newEarningsStatus =
-        viewCount >= PAYOUT_CONFIRMATION_THRESHOLD_VIEWS ? "confirmed" : "pending";
-
-      await supabase
-        .from("earnings")
-        .update({
-          verified_views: viewCount,
-          amount_usd: amountUsd,
-          status: newEarningsStatus,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", existingEarnings.id);
     }
   },
   { connection: { url: REDIS_URL }, concurrency: 5 }

@@ -84,14 +84,12 @@ const worker = new Worker<PayoutJob>(
           })
           .eq("id", earning.id);
 
-        // Update campaign spent_budget
-        const newSpent =
-          Number(earning.campaigns.spent_budget) + Number(earning.amount_usd);
-
-        await supabase
-          .from("campaigns")
-          .update({ spent_budget: newSpent })
-          .eq("id", earning.campaign_id);
+        // Atomically bump campaign spent_budget (avoids the read-modify-write
+        // race when several earnings on one campaign are paid in the same run).
+        await supabase.rpc("increment_campaign_spent", {
+          p_campaign_id: earning.campaign_id,
+          p_amount: Number(earning.amount_usd),
+        });
 
         // Update submission status to paid
         await supabase
