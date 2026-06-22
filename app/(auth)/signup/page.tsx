@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import type { Provider } from "@supabase/supabase-js";
+import { GoogleIcon, XIcon, DiscordIcon } from "@/components/brand-icons";
 import { createClient } from "@/lib/supabase/client";
 import { getSiteUrl } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
@@ -33,15 +35,15 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
-  async function handleGoogleSignup() {
+  async function handleOAuthSignup(provider: Provider) {
     setLoading(true);
     setError(null);
 
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider,
       options: {
-        // Carry the chosen role through OAuth. Google sign-ups can't pass
+        // Carry the chosen role through OAuth. OAuth sign-ups can't pass
         // signup metadata, so the DB trigger defaults them to 'creator' — the
         // /callback route reads this param to honour the brand/creator choice
         // for first-time users.
@@ -143,14 +145,39 @@ export default function SignupPage() {
           ))}
         </div>
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={handleGoogleSignup}
-          disabled={loading}
-        >
-          Continue with Google
-        </Button>
+        <div className="space-y-2">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleOAuthSignup("google")}
+            disabled={loading}
+          >
+            <GoogleIcon className="size-4" />
+            Continue with Google
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            disabled
+            aria-disabled
+          >
+            <XIcon className="size-4" />
+            Continue with X
+            <span className="ml-auto text-xs font-normal text-muted-foreground">
+              Coming soon
+            </span>
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleOAuthSignup("discord")}
+            disabled={loading}
+          >
+            <DiscordIcon className="size-4 text-[#5865F2]" />
+            Continue with Discord
+          </Button>
+        </div>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

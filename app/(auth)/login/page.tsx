@@ -4,6 +4,8 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import type { Provider } from "@supabase/supabase-js";
+import { GoogleIcon, XIcon, DiscordIcon } from "@/components/brand-icons";
 import { createClient } from "@/lib/supabase/client";
 import { getSiteUrl } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
@@ -87,14 +89,20 @@ function LoginContent() {
     router.refresh();
   }
 
-  async function handleGoogleLogin() {
+  async function handleOAuthLogin(provider: Provider) {
     setLoading(true);
     setError(null);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider,
       options: {
         redirectTo: `${window.location.origin}/callback?redirect=${redirect}`,
+        // On *login* (vs signup) skip the provider's consent screen for users
+        // who already authorized the app — Discord re-prompts on every sign-in
+        // by default, which feels like the signup flow. `prompt=none` makes it
+        // a one-tap return. Only providers that re-consent need this; Google
+        // handles returning users silently on its own.
+        queryParams: provider === "discord" ? { prompt: "none" } : undefined,
       },
     });
 
@@ -111,14 +119,39 @@ function LoginContent() {
         <CardDescription>Sign in to your account</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={handleGoogleLogin}
-          disabled={loading}
-        >
-          Continue with Google
-        </Button>
+        <div className="space-y-2">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleOAuthLogin("google")}
+            disabled={loading}
+          >
+            <GoogleIcon className="size-4" />
+            Continue with Google
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            disabled
+            aria-disabled
+          >
+            <XIcon className="size-4" />
+            Continue with X
+            <span className="ml-auto text-xs font-normal text-muted-foreground">
+              Coming soon
+            </span>
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleOAuthLogin("discord")}
+            disabled={loading}
+          >
+            <DiscordIcon className="size-4 text-[#5865F2]" />
+            Continue with Discord
+          </Button>
+        </div>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
