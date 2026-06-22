@@ -30,11 +30,20 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.push("/login"); return; }
       setUserId(user.id);
-      setRole((user.user_metadata?.role as UserRole) ?? "creator");
-      setCompanyName(user.user_metadata?.display_name ?? "");
+      // `profiles.role` is the single source of truth — OAuth users have no
+      // role in user_metadata, so reading it here would force them to "creator".
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      setRole((profile?.role as UserRole) ?? "creator");
+      setCompanyName(
+        user.user_metadata?.display_name ?? user.user_metadata?.full_name ?? "",
+      );
     });
   }, [router]);
 
@@ -96,13 +105,13 @@ export default function OnboardingPage() {
 
       <main className="flex flex-1 items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-md">
-          <Card>
+          <Card className="shadow-none transition-none hover:translate-y-0 hover:shadow-none">
             <CardHeader>
-              <CardTitle>Complete your profile</CardTitle>
+              <CardTitle>Finish setting up your account</CardTitle>
               <CardDescription>
                 {role === "brand"
-                  ? "Tell creators about your brand"
-                  : "Tell brands what you create"}
+                  ? "A few details so creators know who they're working with."
+                  : "A few details so brands can match you to campaigns."}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -159,7 +168,7 @@ export default function OnboardingPage() {
                             key={niche}
                             type="button"
                             onClick={() => toggleNiche(niche)}
-                            className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+                            className={`border px-3 py-1 text-sm ${
                               selectedNiches.includes(niche)
                                 ? "border-primary bg-primary text-primary-foreground"
                                 : "border-border hover:border-muted-foreground/50"
