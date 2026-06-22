@@ -33,6 +33,28 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
+  async function handleGoogleSignup() {
+    setLoading(true);
+    setError(null);
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        // Carry the chosen role through OAuth. Google sign-ups can't pass
+        // signup metadata, so the DB trigger defaults them to 'creator' — the
+        // /callback route reads this param to honour the brand/creator choice
+        // for first-time users.
+        redirectTo: `${window.location.origin}/callback?role=${role}`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  }
+
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -119,6 +141,24 @@ export default function SignupPage() {
               </div>
             </button>
           ))}
+        </div>
+
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleGoogleSignup}
+          disabled={loading}
+        >
+          Continue with Google
+        </Button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">or</span>
+          </div>
         </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
