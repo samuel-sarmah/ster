@@ -146,6 +146,18 @@
   html {
     @apply font-sans;
   }
+  /* iOS Safari adds a ~300ms tap delay (waiting for a double-tap-to-zoom) on
+     interactive elements, which makes taps on a real iPhone feel unresponsive
+     even though desktop-inspector clicks fire instantly. `manipulation` opts
+     out of that delay while keeping pinch-zoom, and we drop the grey tap flash. */
+  button,
+  a,
+  label,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
   .container {
     padding-inline: 1rem;
   }
