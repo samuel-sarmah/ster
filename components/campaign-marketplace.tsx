@@ -17,6 +17,19 @@ const PLATFORMS: { value: Platform; label: string }[] = [
   { value: "x", label: "X" },
 ];
 
+type SortKey = "rate-desc" | "rate-asc" | "budget-desc";
+
+const SORTS: { value: SortKey; label: string; compare: (a: CampaignCardProps, b: CampaignCardProps) => number }[] = [
+  { value: "rate-desc", label: "Highest rate first", compare: (a, b) => b.target_cpm - a.target_cpm },
+  { value: "rate-asc", label: "Lowest rate first", compare: (a, b) => a.target_cpm - b.target_cpm },
+  {
+    value: "budget-desc",
+    label: "Most budget left",
+    compare: (a, b) =>
+      b.total_budget - b.spent_budget - (a.total_budget - a.spent_budget),
+  },
+];
+
 interface CampaignMarketplaceProps {
   initialCampaigns: CampaignCardProps[];
   isAuthenticated?: boolean;
@@ -30,8 +43,11 @@ export function CampaignMarketplace({
 }: CampaignMarketplaceProps) {
   const [query, setQuery] = useState("");
   const [platform, setPlatform] = useState<Platform>("all");
+  const [sort, setSort] = useState<SortKey>("rate-desc");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const activeSort = SORTS.find((s) => s.value === sort) ?? SORTS[0];
 
   const filtered = initialCampaigns
     .filter((c) => platform === "all" || c.platforms.includes(platform))
@@ -40,7 +56,8 @@ export function CampaignMarketplace({
         !query ||
         c.title.toLowerCase().includes(query.toLowerCase()) ||
         c.brand_name.toLowerCase().includes(query.toLowerCase()),
-    );
+    )
+    .sort(activeSort.compare);
 
   const selected = selectedIndex != null ? filtered[selectedIndex] ?? null : null;
 
@@ -73,9 +90,21 @@ export function CampaignMarketplace({
                 {p.label}
               </button>
             ))}
-            <span className="ml-2 text-xs text-muted-foreground hidden sm:block">
-              Highest rate first
-            </span>
+            <label className="ml-2 hidden items-center gap-1.5 sm:flex">
+              <span className="sr-only">Sort campaigns</span>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortKey)}
+                className="rounded-full border border-border/60 bg-transparent px-3 py-1.5 text-xs font-bold text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                aria-label="Sort campaigns"
+              >
+                {SORTS.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         </div>
 
