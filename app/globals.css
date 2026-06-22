@@ -70,7 +70,7 @@
   --chart-3: oklch(0.65 0.01 30);
   --chart-4: oklch(0.72 0.01 30);
   --chart-5: oklch(0.82 0.005 30);
-  --radius: 0.625rem;
+  --radius: 0;
   --sidebar: oklch(0.97 0.003 30);
   --sidebar-foreground: oklch(0.05 0 0);
   --sidebar-primary: oklch(0.05 0 0);
@@ -131,6 +131,14 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  /* Project-wide: no rounded corners on anything (cards, buttons, inputs,
+     badges, avatars…). !important so it also overrides utility classes like
+     `rounded-lg` / `rounded-full` baked into components. */
+  *,
+  *::before,
+  *::after {
+    border-radius: 0 !important;
   }
   body {
     @apply bg-background text-foreground;

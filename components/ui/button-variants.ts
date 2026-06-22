@@ -6,7 +6,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-linear-to-r from-primary to-secondary text-primary-foreground shadow-[var(--shadow-button)] hover:brightness-105",
+          "bg-primary text-primary-foreground hover:bg-primary",
         outline:
           "border-border bg-background text-foreground shadow-xs hover:border-primary/40 hover:bg-muted/70 aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
