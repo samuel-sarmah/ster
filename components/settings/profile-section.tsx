@@ -76,7 +76,7 @@ export function ProfileSection({
   }
 
   return (
-    <form onSubmit={handleSave} className="rounded-lg border p-4 space-y-4">
+    <form onSubmit={handleSave} className="space-y-4">
       <div>
         <h2 className="font-semibold">Profile</h2>
         <p className="text-sm text-muted-foreground mt-1">
@@ -142,7 +142,7 @@ export function PasswordSection() {
   }
 
   return (
-    <form onSubmit={handleSave} className="rounded-lg border p-4 space-y-4">
+    <form onSubmit={handleSave} className="space-y-4">
       <div>
         <h2 className="font-semibold">Password</h2>
         <p className="text-sm text-muted-foreground mt-1">

@@ -35,7 +35,7 @@ export function DeleteAccountSection() {
   }
 
   return (
-    <div className="rounded-lg border border-destructive/40 p-4 space-y-4">
+    <div className="space-y-4 border-t pt-6">
       <div>
         <h2 className="font-semibold text-destructive">Delete account</h2>
         <p className="text-sm text-muted-foreground mt-1">

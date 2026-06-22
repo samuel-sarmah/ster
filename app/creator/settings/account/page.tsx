@@ -27,7 +27,7 @@ export default async function CreatorAccountSettingsPage() {
 
       <PasswordSection />
 
-      <section className="rounded-lg border p-4 space-y-3">
+      <section className="space-y-3 border-t pt-6">
         <div>
           <h2 className="font-semibold">Connected accounts</h2>
           <p className="text-sm text-muted-foreground mt-1">
