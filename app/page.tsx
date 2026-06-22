@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSessionRole } from "@/lib/auth/get-session-role";
 import { CampaignMarketplace } from "@/components/campaign-marketplace";
 import { Testimonial8 } from "@/components/testimonial8";
 import type { CampaignCardProps } from "@/components/campaign-card";
@@ -151,13 +152,7 @@ const PLACEHOLDER_IMAGE_QUERIES = [
 export default async function Home() {
   const supabase = await createClient();
 
-  let user = null;
-  try {
-    const { data: userData } = await supabase.auth.getUser();
-    user = userData.user;
-  } catch {
-    // Supabase unreachable — render the marketplace for an anonymous visitor
-  }
+  const { user, role: userRole } = await getSessionRole();
 
   const { data } = await supabase
     .from("campaigns")
@@ -204,7 +199,7 @@ export default async function Home() {
       <CampaignMarketplace
         initialCampaigns={campaigns}
         isAuthenticated={!!user}
-        userRole={(user?.user_metadata?.role as string | undefined) ?? null}
+        userRole={userRole}
       />
 
       <section id="testimonials" className="scroll-mt-20">

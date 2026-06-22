@@ -1,11 +1,9 @@
 import { CircleHelp, Handshake, LayoutGrid, ShieldCheck } from "lucide-react";
 import { Navbar1 } from "@/components/navbar1";
-import { createClient } from "@/lib/supabase/server";
+import { getSessionRole } from "@/lib/auth/get-session-role";
 
 export async function SiteHeader() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const role = user?.user_metadata?.role as string | undefined;
+  const { user, role } = await getSessionRole();
   const dashboardUrl =
     role === "creator" ? "/creator/dashboard"
     : role === "brand" ? "/brand/dashboard"
