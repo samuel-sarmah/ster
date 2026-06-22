@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { PlatformIcon, PLATFORM_BRAND_CLASS, type PlatformKey } from "@/components/brand-icons";
 import { cn } from "@/lib/utils";
 import { joinCampaign } from "@/app/campaigns/actions";
 import type { CampaignCardProps } from "@/components/campaign-card";
@@ -246,8 +247,12 @@ export function CampaignDetailDialog({
           {campaign.platforms.map((p) => (
             <span
               key={p}
-              className="rounded-full border border-border/60 px-2.5 py-1 text-xs font-medium text-muted-foreground"
+              className="flex items-center gap-1.5 rounded-full border border-border/60 px-2.5 py-1 text-xs font-medium text-muted-foreground"
             >
+              <PlatformIcon
+                platform={p}
+                className={cn("size-3.5", PLATFORM_BRAND_CLASS[p as PlatformKey])}
+              />
               {PLATFORM_LABELS[p] ?? p}
             </span>
           ))}

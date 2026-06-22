@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { PlatformIcon, PLATFORM_BRAND_CLASS, type PlatformKey } from "@/components/brand-icons";
+import { cn } from "@/lib/utils";
 import type { Platform } from "@/lib/supabase/types";
 
 const PLATFORMS: Platform[] = ["tiktok", "instagram", "youtube", "x"];
@@ -53,17 +55,25 @@ export default async function SocialsPage({
               key={platform}
               className="border rounded-lg p-4 flex items-center justify-between"
             >
-              <div>
-                <div className="font-medium">{PLATFORM_LABELS[platform]}</div>
-                {account ? (
-                  <div className="text-sm text-muted-foreground mt-0.5">
-                    @{account.handle}
-                    {account.follower_count != null &&
-                      ` · ${account.follower_count.toLocaleString()} followers`}
-                  </div>
-                ) : (
-                  <div className="text-sm text-muted-foreground">Not connected</div>
-                )}
+              <div className="flex items-center gap-3">
+                <span className="flex size-9 items-center justify-center rounded-full border border-border/60 bg-background">
+                  <PlatformIcon
+                    platform={platform}
+                    className={cn("size-5", PLATFORM_BRAND_CLASS[platform as PlatformKey])}
+                  />
+                </span>
+                <div>
+                  <div className="font-medium">{PLATFORM_LABELS[platform]}</div>
+                  {account ? (
+                    <div className="text-sm text-muted-foreground mt-0.5">
+                      @{account.handle}
+                      {account.follower_count != null &&
+                        ` · ${account.follower_count.toLocaleString()} followers`}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground">Not connected</div>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 {account ? (

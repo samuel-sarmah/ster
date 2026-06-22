@@ -1,3 +1,6 @@
+import { PlatformIcon, PLATFORM_BRAND_CLASS, type PlatformKey } from "@/components/brand-icons";
+import { cn } from "@/lib/utils";
+
 export interface CampaignCardProps {
   id: string;
   title: string;
@@ -77,13 +80,18 @@ export function CampaignCard({
           </span>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap items-center gap-1.5">
             {platforms.map((p) => (
               <span
                 key={p}
-                className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                title={PLATFORM_LABELS[p] ?? p}
+                aria-label={PLATFORM_LABELS[p] ?? p}
+                className="flex size-6 items-center justify-center rounded-full border border-border/60 bg-background"
               >
-                {PLATFORM_LABELS[p] ?? p}
+                <PlatformIcon
+                  platform={p}
+                  className={cn("size-3.5", PLATFORM_BRAND_CLASS[p as PlatformKey])}
+                />
               </span>
             ))}
           </div>
