@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NICHES } from "@/lib/niches";
 import type { Platform } from "@/lib/supabase/types";
 
 type Step = "basics" | "guidelines" | "platforms" | "budget" | "review";
@@ -25,6 +26,7 @@ interface FormData {
   guidelines: string;
   content_requirements: string;
   platforms: Platform[];
+  categories: string[];
   target_cpm: string;
   total_budget: string;
   starts_at: string;
@@ -37,6 +39,7 @@ const EMPTY: FormData = {
   guidelines: "",
   content_requirements: "",
   platforms: [],
+  categories: [],
   target_cpm: "",
   total_budget: "",
   starts_at: "",
@@ -62,6 +65,15 @@ export function CampaignWizard() {
       form.platforms.includes(p)
         ? form.platforms.filter((x) => x !== p)
         : [...form.platforms, p]
+    );
+  }
+
+  function toggleCategory(c: string) {
+    set(
+      "categories",
+      form.categories.includes(c)
+        ? form.categories.filter((x) => x !== c)
+        : [...form.categories, c]
     );
   }
 
@@ -174,6 +186,29 @@ export function CampaignWizard() {
               </button>
             ))}
           </div>
+
+          <div className="space-y-2 pt-2">
+            <Label>Content niches</Label>
+            <p className="text-xs text-muted-foreground">
+              Helps us surface this campaign to creators in matching niches.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {NICHES.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => toggleCategory(c)}
+                  className={`border px-3 py-1 text-sm transition-colors ${
+                    form.categories.includes(c)
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border hover:border-muted-foreground/50"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
@@ -250,6 +285,7 @@ export function CampaignWizard() {
               ["Title", form.title],
               ["Description", form.description],
               ["Platforms", form.platforms.join(", ")],
+              ["Niches", form.categories.join(", ")],
               ["Target CPM", `$${parseFloat(form.target_cpm || "0").toFixed(2)}`],
               ["Total budget", `$${parseFloat(form.total_budget || "0").toLocaleString()}`],
             ].map(([label, value]) => (

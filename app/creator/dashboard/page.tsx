@@ -14,9 +14,17 @@ export default async function CreatorDashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("stripe_account_id")
+    .select("stripe_account_id, display_name")
     .eq("id", user!.id)
     .single();
+
+  const { data: creatorProfile } = await supabase
+    .from("creator_profiles")
+    .select("bio, niche")
+    .eq("id", user!.id)
+    .single();
+
+  const niches = (creatorProfile?.niche as string[] | null) ?? [];
 
   const { data: earnings } = await supabase
     .from("earnings")
@@ -64,6 +72,44 @@ export default async function CreatorDashboardPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <h1 className="text-2xl font-bold">Creator dashboard</h1>
+
+      <Card className={STATIC_CARD}>
+        <CardHeader className="flex-row items-start justify-between gap-3 space-y-0 pb-3">
+          <div className="min-w-0">
+            <CardTitle className="text-base">
+              {profile?.display_name ?? "Your profile"}
+            </CardTitle>
+            {creatorProfile?.bio ? (
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                {creatorProfile.bio}
+              </p>
+            ) : (
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                Add a bio so brands know who they&apos;re working with.
+              </p>
+            )}
+          </div>
+          <Link href="/onboarding" className="shrink-0 text-sm underline">
+            Edit
+          </Link>
+        </CardHeader>
+        <CardContent>
+          {niches.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-muted-foreground">Niches:</span>
+              {niches.map((n) => (
+                <Badge key={n} variant="secondary" className="text-xs">
+                  {n}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              No niches set — pick a few to get matched to relevant campaigns.
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
       {!profile?.stripe_account_id ? (
         <div className="border rounded-lg p-4 flex items-center justify-between bg-muted/20">
