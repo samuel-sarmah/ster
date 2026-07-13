@@ -33,25 +33,24 @@ export function SiteFooter() {
         {
           title: "Platform",
           links: [
-            { name: "How it works", href: "/#hero" },
-            { name: "Campaign gallery", href: "/#gallery" },
-            { name: "Pricing", href: "/#pricing" },
+            { name: "How it works", href: "/#how-it-works" },
+            { name: "Browse campaigns", href: "/#marketplace" },
+            { name: "Testimonials", href: "/#testimonials" },
           ],
         },
         {
-          title: "Users",
+          title: "Account",
           links: [
-            { name: "For brands", href: "/signup" },
             { name: "For creators", href: "/signup" },
+            { name: "For brands", href: "/signup?role=brand" },
             { name: "Sign in", href: "/login" },
           ],
         },
         {
           title: "Company",
           links: [
-            { name: "Testimonials", href: "/#testimonials" },
-            { name: "Contact", href: "/#contact" },
             { name: "Home", href: "/" },
+            { name: "Terms", href: "/terms" },
           ],
         },
       ]}
@@ -61,10 +60,7 @@ export function SiteFooter() {
         { icon: <InstagramIcon className="size-5" />, href: "https://www.instagram.com", label: "Instagram" },
       ]}
       copyright={`© ${new Date().getFullYear()} Sterz. All rights reserved.`}
-      legalLinks={[
-        { name: "Terms", href: "/terms" },
-        { name: "Privacy", href: "/" },
-      ]}
+      legalLinks={[{ name: "Terms", href: "/terms" }]}
     />
   );
 }
