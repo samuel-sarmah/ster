@@ -146,17 +146,17 @@ const defaultProps: Testimonial8Props = {
 const COLUMN_DURATIONS = [28, 22, 25];
 
 const TestimonialCard = ({ testimonial }: { testimonial: TestimonialBasicGridItem }) => (
-  <Card className="border border-white/10 bg-white/5 p-5 shrink-0 hover:translate-y-0 hover:shadow-none">
+  <Card className="border border-border bg-card p-5 shrink-0 hover:translate-y-0 hover:shadow-none">
     <div className="flex gap-4 leading-5">
-      <Avatar className="size-10 rounded-full ring-1 ring-white/20">
+      <Avatar className="size-10 rounded-full ring-1 ring-border">
         <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
       </Avatar>
       <div className="mb-2 text-sm">
-        <p className="font-bold text-white">{testimonial.name}</p>
-        <p className="text-white/50">{testimonial.role}</p>
+        <p className="font-bold text-foreground">{testimonial.name}</p>
+        <p className="text-muted-foreground">{testimonial.role}</p>
       </div>
     </div>
-    <div className="mt-1 leading-7 text-white/70">
+    <div className="mt-1 leading-7 text-muted-foreground">
       <q>{testimonial.content}</q>
     </div>
   </Card>
@@ -177,10 +177,10 @@ const Testimonial8 = (props: Props) => {
   ];
 
   return (
-    <section className={cn("section-dark section-padding overflow-hidden", className)}>
-      <div className="w-4/5 mx-auto">
+    <section className={cn("section-padding overflow-hidden", className)}>
+      <div className="container mx-auto">
         <div className="flex flex-col items-start gap-3 md:items-center">
-          <h2 className="max-w-3xl text-balance text-2xl font-black tracking-[-0.03em] sm:text-3xl md:text-center lg:text-4xl">
+          <h2 className="max-w-3xl text-balance text-2xl font-black tracking-[-0.03em] text-foreground sm:text-3xl md:text-center lg:text-4xl">
             {heading}
           </h2>
         </div>
