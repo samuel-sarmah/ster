@@ -142,7 +142,7 @@ const Footer7 = (props: Props) => {
   };
 
   return (
-    <section className={cn("section-dark py-14 md:py-18 lg:py-22", className)}>
+    <section className={cn("border-t border-border bg-muted/30 py-14 md:py-18 lg:py-22", className)}>
       <div className="container mx-auto">
         <div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
           <div className="flex w-full flex-col justify-between gap-6 lg:items-start">
@@ -159,7 +159,7 @@ const Footer7 = (props: Props) => {
             <p className="max-w-[70%] text-sm text-muted-foreground">
               {description}
             </p>
-            <ul className="flex items-center space-x-5 text-white/50">
+            <ul className="flex items-center space-x-5 text-muted-foreground">
               {socialLinks?.map((social, idx) => (
                 <li key={idx} className="font-medium">
                   <a href={social.href} aria-label={social.label} className="transition-colors duration-200 hover:text-accent">
@@ -172,10 +172,10 @@ const Footer7 = (props: Props) => {
           <div className="grid w-full gap-8 md:grid-cols-3 lg:gap-16">
             {sections?.slice(0, 3).map((section, sectionIdx) => (
               <div key={sectionIdx}>
-                <h3 className="mb-4 text-sm font-bold tracking-tight text-white">
+                <h3 className="mb-4 text-sm font-bold tracking-tight text-foreground">
                   {section.title}
                 </h3>
-                <ul className="space-y-3 text-sm text-white/50">
+                <ul className="space-y-3 text-sm text-muted-foreground">
                   {section.links.map((link, linkIdx) => (
                     <li key={linkIdx} className="font-semibold">
                       <a href={link.href} className="transition-colors duration-200 hover:text-accent">{link.name}</a>
@@ -186,7 +186,7 @@ const Footer7 = (props: Props) => {
             ))}
           </div>
         </div>
-        <div className="mt-10 flex flex-col justify-between gap-4 border-t border-white/10 py-8 text-xs font-semibold text-white/40 md:flex-row md:items-center md:text-left">
+        <div className="mt-10 flex flex-col justify-between gap-4 border-t border-border py-8 text-xs font-semibold text-muted-foreground md:flex-row md:items-center md:text-left">
           <p className="order-2 lg:order-1">{copyright}</p>
           <ul className="order-1 flex flex-col gap-2 md:order-2 md:flex-row">
             {legalLinks?.map((link, idx) => (
