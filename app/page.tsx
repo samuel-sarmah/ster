@@ -2,6 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import { getSessionRole } from "@/lib/auth/get-session-role";
 import { CampaignMarketplace } from "@/components/campaign-marketplace";
 import { Testimonial8 } from "@/components/testimonial8";
+import { LandingHero } from "@/components/landing/hero";
+import { ReceiptTicker } from "@/components/landing/receipt-ticker";
+import { Manifesto } from "@/components/landing/manifesto";
+import { Steps } from "@/components/landing/steps";
+import { Audiences } from "@/components/landing/audiences";
+import { Features } from "@/components/landing/features";
+import { ClosingCta } from "@/components/landing/closing-cta";
 import type { CampaignCardProps } from "@/components/campaign-card";
 
 const testimonials = [
@@ -195,12 +202,42 @@ export default async function Home() {
   }
 
   return (
-    <main className="section-dark bg-black">
-      <CampaignMarketplace
-        initialCampaigns={campaigns}
-        isAuthenticated={!!user}
-        userRole={userRole}
-      />
+    <main
+      className="text-foreground"
+      style={{
+        background:
+          "radial-gradient(1200px 620px at 50% -6%, oklch(0.9 0.07 262 / 0.9), transparent 62%)," +
+          "radial-gradient(900px 520px at 100% 2%, oklch(0.9 0.065 232 / 0.6), transparent 55%)," +
+          "radial-gradient(820px 520px at 0% 10%, oklch(0.92 0.06 292 / 0.45), transparent 55%)," +
+          "oklch(0.975 0.016 258)",
+      }}
+    >
+      <LandingHero />
+      <ReceiptTicker />
+      <Manifesto />
+      <Steps />
+      <Audiences />
+      <Features />
+
+      {/* The marketplace is now a destination, not the front door. */}
+      <section id="marketplace" className="scroll-mt-20 border-b border-border">
+        <div className="container mx-auto pt-20 lg:pt-28">
+          <div className="max-w-2xl">
+            <h2 className="mt-4 text-balance text-3xl font-black leading-[1.08] tracking-[-0.03em] text-foreground sm:text-4xl">
+              Campaigns paying out right now.
+            </h2>
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
+              Every card is a funded, escrow-backed brief. Filter by platform, sort by
+              rate, and claim the ones that fit your audience.
+            </p>
+          </div>
+        </div>
+        <CampaignMarketplace
+          initialCampaigns={campaigns}
+          isAuthenticated={!!user}
+          userRole={userRole}
+        />
+      </section>
 
       <section id="testimonials" className="scroll-mt-20">
         <Testimonial8
@@ -209,6 +246,8 @@ export default async function Home() {
           testimonials={testimonials}
         />
       </section>
+
+      <ClosingCta />
     </main>
   );
 }
