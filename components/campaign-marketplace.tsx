@@ -62,8 +62,8 @@ export function CampaignMarketplace({
   const selected = selectedIndex != null ? filtered[selectedIndex] ?? null : null;
 
   return (
-    <section id="marketplace" className="scroll-mt-20 border-b border-border/60">
-      <div className="w-4/5 mx-auto">
+    <div>
+      <div className="container mx-auto">
         {/* Filter bar */}
         <div className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative w-full sm:max-w-xs">
@@ -153,6 +153,6 @@ export function CampaignMarketplace({
           )
         }
       />
-    </section>
+    </div>
   );
 }
