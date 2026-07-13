@@ -229,6 +229,15 @@
   }
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @layer utilities {
   .section-padding {
     @apply py-14 sm:py-18 lg:py-22;
@@ -310,13 +319,18 @@
   .animate-scroll-up {
     animation: scroll-up var(--scroll-duration, 25s) linear infinite;
   }
+
+  .animate-marquee {
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
   .animate-soft-float,
   .animate-sweep,
-  .animate-scroll-up {
+  .animate-scroll-up,
+  .animate-marquee {
     animation: none;
   }
 }
