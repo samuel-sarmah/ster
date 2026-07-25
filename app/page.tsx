@@ -214,9 +214,6 @@ export default async function Home() {
     >
       <LandingHero />
       <ReceiptTicker />
-      <Manifesto />
-      <Steps />
-      <Audiences />
       <Features />
 
       {/* The marketplace is now a destination, not the front door. */}
