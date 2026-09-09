@@ -1,4 +1,4 @@
-import { Lock, Gauge, ShieldAlert, Banknote } from "lucide-react";
+import { Gauge } from "lucide-react";
 import { TikTokIcon, InstagramIcon, YouTubeIcon, XIcon } from "@/components/brand-icons";
 
 const API_READ = [
@@ -43,41 +43,8 @@ export function Features() {
               </div>
             </div>
           </div>
-
-          <Cell
-            icon={<Lock className="size-5" />}
-            title="Escrow-backed budgets"
-            body="Funds are captured up front and capped. A campaign can never pay out more than the brand deposited."
-          />
-          <Cell
-            icon={<Banknote className="size-5" />}
-            title="Stripe Connect payouts"
-            body="Creators onboard once and get paid on a rolling schedule — straight to their bank, no invoices."
-          />
-          <Cell
-            icon={<ShieldAlert className="size-5" />}
-            title="Fraud-velocity checks"
-            body="Suspicious view spikes are flagged before a payout releases, so bot traffic never drains a budget."
-          />
-          <Cell
-            icon={<Gauge className="size-5" />}
-            title="Transparent CPM"
-            body="Every campaign shows its exact rate and remaining budget. Both sides do the same math."
-          />
         </div>
       </div>
     </section>
-  );
-}
-
-function Cell({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
-  return (
-    <div className={CELL}>
-      <span className="flex size-10 items-center justify-center border border-border bg-muted text-accent">
-        {icon}
-      </span>
-      <h3 className="mt-6 text-base font-bold tracking-tight text-foreground">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
-    </div>
   );
 }
