@@ -19,26 +19,11 @@
  */
 import { createClient } from "@supabase/supabase-js";
 import { BigQuery } from "@google-cloud/bigquery";
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { loadLocalEnv } from "../lib/env/load-local-env";
 
-// --- minimal .env.local loader (tsx scripts don't auto-load it) ---
-function loadEnv() {
-  try {
-    const raw = readFileSync(resolve(process.cwd(), ".env.local"), "utf8");
-    for (const line of raw.split("\n")) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) continue;
-      const i = trimmed.indexOf("=");
-      const key = trimmed.slice(0, i).trim();
-      const val = trimmed.slice(i + 1).trim().replace(/^["']|["']$/g, "");
-      if (!(key in process.env)) process.env[key] = val;
-    }
-  } catch {
-    // fall back to whatever is already in process.env
-  }
-}
-loadEnv();
+loadLocalEnv();
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY;
