@@ -9,7 +9,6 @@ import { createClient } from "@supabase/supabase-js";
 import { getAdapter } from "../lib/social";
 import type { Platform } from "../lib/supabase/types";
 import { decryptToken } from "../lib/crypto/token-cipher";
-import { insertViewSnapshotEvent } from "../lib/bigquery";
 
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
 
@@ -68,20 +67,8 @@ const worker = new Worker<ViewTrackingJob>(
     });
     if (recordErr) throw recordErr;
 
-    // Best-effort mirror to BigQuery for analytics. Must never fail the job:
-    // the Postgres write above is the source of truth for payouts.
-    try {
-      await insertViewSnapshotEvent({
-        submission_id,
-        view_count: viewCount,
-        fetched_at: new Date().toISOString(),
-      });
-    } catch (bqErr) {
-      console.error(
-        `[view-tracker] BigQuery mirror failed for submission ${submission_id}:`,
-        bqErr instanceof Error ? bqErr.message : bqErr
-      );
-    }
+    // No BigQuery mirror here: streaming inserts require billing and this
+    // project is a sandbox. `npm run bq:sync` batch-loads the warehouse instead.
 
     // Update submission to tracking if still approved
     if (submission.status === "approved") {
