@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import type { Provider } from "@supabase/supabase-js";
 import { GoogleIcon, XIcon, DiscordIcon } from "@/components/brand-icons";
 import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/lib/auth/auth-error-messages";
 import { getSiteUrl } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,8 +23,9 @@ import {
 
 type Role = "creator" | "brand";
 
-export default function SignupPage() {
+function SignupContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [role, setRole] = useState<Role>("creator");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +33,11 @@ export default function SignupPage() {
   const [displayName, setDisplayName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // A login attempt that turned out to have no account lands here with
+  // ?error=no_account, so say why rather than showing a bare signup form.
+  const [error, setError] = useState<string | null>(() =>
+    authErrorMessage(searchParams.get("error"))
+  );
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
@@ -47,7 +53,7 @@ export default function SignupPage() {
         // signup metadata, so the DB trigger defaults them to 'creator' — the
         // /callback route reads this param to honour the brand/creator choice
         // for first-time users.
-        redirectTo: `${window.location.origin}/callback?role=${role}`,
+        redirectTo: `${window.location.origin}/callback?intent=signup&role=${role}`,
       },
     });
 
@@ -269,5 +275,13 @@ export default function SignupPage() {
         </p>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="text-sm text-muted-foreground">Loading sign up…</div>}>
+      <SignupContent />
+    </Suspense>
   );
 }

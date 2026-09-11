@@ -3,11 +3,25 @@ import { createClient } from "@/lib/supabase/server";
 
 /**
  * Resolves the authenticated user for an API route and rejects suspended
- * accounts. Middleware enforces this for page routes, but its matcher only
- * gates `/brand`, `/creator`, `/admin` path prefixes — API routes need their
- * own check.
+ * accounts. proxy.ts (Next 16's middleware) enforces this for page routes, but
+ * its matcher only gates `/brand`, `/creator`, `/admin` path prefixes — API
+ * routes need their own check.
  */
-export async function requireActiveUser() {
+type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+type ActiveUserProfile = { role: string | null; is_suspended: boolean | null };
+
+/** Discriminated so `if ("error" in result)` narrows cleanly at call sites. */
+export type RequireActiveUserResult =
+  | { error: NextResponse }
+  | {
+      user: NonNullable<
+        Awaited<ReturnType<SupabaseServerClient["auth"]["getUser"]>>["data"]["user"]
+      >;
+      profile: ActiveUserProfile | null;
+      supabase: SupabaseServerClient;
+    };
+
+export async function requireActiveUser(): Promise<RequireActiveUserResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

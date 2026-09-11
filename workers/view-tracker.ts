@@ -67,6 +67,9 @@ const worker = new Worker<ViewTrackingJob>(
     });
     if (recordErr) throw recordErr;
 
+    // No BigQuery mirror here: streaming inserts require billing and this
+    // project is a sandbox. `npm run bq:sync` batch-loads the warehouse instead.
+
     // Update submission to tracking if still approved
     if (submission.status === "approved") {
       await supabase

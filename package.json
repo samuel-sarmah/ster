@@ -6,13 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run --project unit --project dryrun",
+    "test:unit": "vitest run --project unit",
+    "test:live": "vitest run",
+    "test:watch": "vitest --project unit",
     "worker:view-tracker": "npx tsx workers/view-tracker.ts",
     "worker:payout": "npx tsx workers/payout-processor.ts",
     "seed": "npx tsx scripts/seed-campaigns.ts",
-    "seed:reset": "npx tsx scripts/seed-campaigns.ts --reset"
+    "seed:reset": "npx tsx scripts/seed-campaigns.ts --reset",
+    "bq:sync": "npx tsx scripts/export-supabase-to-bigquery.ts",
+    "bq:demo": "npx tsx scripts/generate-bigquery-demo.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
+    "@google-cloud/bigquery": "^9.0.2",
     "@hookform/resolvers": "^5.4.0",
     "@stripe/stripe-js": "^9.7.0",
     "@supabase/ssr": "^0.10.3",
@@ -37,12 +44,15 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/big.js": "^7.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "supabase": "^2.104.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^3.2.7"
   }
 }

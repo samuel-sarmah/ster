@@ -7,6 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import type { Provider } from "@supabase/supabase-js";
 import { GoogleIcon, XIcon, DiscordIcon } from "@/components/brand-icons";
 import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/lib/auth/auth-error-messages";
 import { getSiteUrl } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +29,10 @@ function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // /callback bounces failed or refused sign-ins back here with ?error=.
+  const [error, setError] = useState<string | null>(() =>
+    authErrorMessage(searchParams.get("error"))
+  );
   const [loading, setLoading] = useState(false);
   // Supabase returns a generic "Invalid login credentials" both for a wrong
   // password and for an unconfirmed email, so offer a resend path on failure.
@@ -96,7 +100,10 @@ function LoginContent() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/callback?redirect=${redirect}`,
+        // intent=login tells /callback to refuse an account this exchange
+        // creates: OAuth provisions unknown users on sight, and sign-in is
+        // for people who already have an account.
+        redirectTo: `${window.location.origin}/callback?intent=login&redirect=${redirect}`,
         // On *login* (vs signup) skip the provider's consent screen for users
         // who already authorized the app — Discord re-prompts on every sign-in
         // by default, which feels like the signup flow. `prompt=none` makes it

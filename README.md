@@ -35,9 +35,10 @@ components/
   landing/        Landing-page sections (hero, manifesto, steps, bento, …)
   ui/             shadcn primitives
 lib/              Supabase/Stripe clients, auth guards, social adapters, crypto
+lib/bigquery/     Warehouse client + the analytics report SQL
 workers/          view-tracker.ts, payout-processor.ts
 supabase/migrations/   Schema + RLS policies (001–005)
-scripts/          seed-campaigns.ts
+scripts/          seed-campaigns.ts, BigQuery sync + demo generators
 proxy.ts          Next.js 16 middleware (auth/session routing)
 ```
 
@@ -108,6 +109,38 @@ npm run worker:payout         # weekly Stripe Connect transfers
 | `npm run worker:view-tracker` | View-verification worker |
 | `npm run worker:payout` | Payout-processing worker |
 | `npm run seed` / `npm run seed:reset` | Seed / reset demo campaign data |
+| `npm run bq:sync` | Batch-load Supabase tables into BigQuery |
+| `npm run bq:demo` | Regenerate the synthetic warehouse dataset |
+| `npm test` | Unit tests + BigQuery dry runs (dry runs are billed at $0) |
+| `npm run test:unit` | Unit tests only - no network, no credentials |
+| `npm run test:live` | Everything, including executing each report query |
+
+## Analytics warehouse
+
+`/admin/analytics` reads three reports out of BigQuery. `lib/bigquery/queries.ts`
+is the single source of truth for that SQL - it is not duplicated as `.sql`
+files, so the dry-run tests can hold it to the live schema.
+
+Local setup needs Application Default Credentials; no service-account key:
+
+```bash
+gcloud auth application-default login
+npm run bq:demo     # populate the dataset with synthetic data
+npm test            # validates the report SQL against the live schema
+```
+
+Two things to know about running this on a **sandbox (no-billing) GCP project**:
+
+- Streaming inserts are unavailable, so `npm run bq:sync` is the only sync path.
+  The view-tracker worker deliberately does not mirror snapshots to BigQuery.
+- The dataset enforces a 60-day table/partition expiration. Re-run
+  `npm run bq:demo` roughly monthly, or the oldest partitions silently vanish
+  and the velocity report's 30-day window empties out.
+
+The velocity report is the expensive one: `view_snapshots` is DAY-partitioned on
+`fetched_at`, and the `WHERE fetched_at >= ...` predicate is what keeps the scan
+bounded as the table grows. `queries.dryrun.test.ts` asserts a per-report byte
+budget, so dropping that predicate fails the test rather than the bill.
 
 ## Deployment
 
