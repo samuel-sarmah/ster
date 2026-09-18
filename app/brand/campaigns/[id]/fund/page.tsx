@@ -22,7 +22,7 @@ export default async function FundCampaignPage({
   if (campaign.status !== "draft") {
     return (
       <div className="max-w-md space-y-4">
-        <h1 className="text-2xl font-bold">Campaign already funded</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.025em]">Campaign already funded</h1>
         <p className="text-muted-foreground">
           This campaign has status <strong>{campaign.status}</strong> and is already active.
         </p>
@@ -33,7 +33,7 @@ export default async function FundCampaignPage({
   return (
     <div className="max-w-md space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Fund campaign</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.025em]">Fund campaign</h1>
         <p className="text-muted-foreground mt-1">
           Deposit ${Number(campaign.total_budget).toLocaleString()} into escrow to activate{" "}
           <strong>{campaign.title}</strong>.

@@ -36,7 +36,7 @@ export default async function CreatorCampaignDetailPage({
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-2xl font-bold">{campaign.title}</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.025em]">{campaign.title}</h1>
         <div className="flex gap-2 mt-1">
           {(campaign.platforms as string[]).map((p) => (
             <Badge key={p} variant="outline" className="capitalize">
@@ -52,7 +52,7 @@ export default async function CreatorCampaignDetailPage({
             <CardTitle className="text-xs text-muted-foreground">Target CPM</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${Number(campaign.target_cpm).toFixed(2)}</div>
+            <div className="text-2xl font-semibold tracking-[-0.025em]">${Number(campaign.target_cpm).toFixed(2)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -60,7 +60,7 @@ export default async function CreatorCampaignDetailPage({
             <CardTitle className="text-xs text-muted-foreground">Budget remaining</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${remaining.toFixed(0)}</div>
+            <div className="text-2xl font-semibold tracking-[-0.025em]">${remaining.toFixed(0)}</div>
           </CardContent>
         </Card>
       </div>

@@ -24,7 +24,7 @@ export default async function AdminCampaignsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Campaigns</h1>
+      <h1 className="text-2xl font-semibold tracking-[-0.025em]">Campaigns</h1>
       <div className="border rounded-lg overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-muted/50">

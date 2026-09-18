@@ -52,7 +52,7 @@ export default async function BrandCampaignDetailPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{campaign.title}</h1>
+          <h1 className="text-2xl font-semibold tracking-[-0.025em]">{campaign.title}</h1>
           <div className="flex gap-2 mt-1">
             <Badge>{campaign.status}</Badge>
             {(campaign.platforms as string[]).map((p) => (
@@ -75,7 +75,7 @@ export default async function BrandCampaignDetailPage({
             <CardTitle className="text-xs text-muted-foreground">Total budget</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${Number(campaign.total_budget).toLocaleString()}</div>
+            <div className="text-2xl font-semibold tracking-[-0.025em]">${Number(campaign.total_budget).toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card>
@@ -83,7 +83,7 @@ export default async function BrandCampaignDetailPage({
             <CardTitle className="text-xs text-muted-foreground">Spent</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${Number(campaign.spent_budget).toFixed(2)}</div>
+            <div className="text-2xl font-semibold tracking-[-0.025em]">${Number(campaign.spent_budget).toFixed(2)}</div>
             <Progress value={spentPct} className="mt-2 h-1.5" />
           </CardContent>
         </Card>
@@ -92,7 +92,7 @@ export default async function BrandCampaignDetailPage({
             <CardTitle className="text-xs text-muted-foreground">Verified views</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalViews.toLocaleString()}</div>
+            <div className="text-2xl font-semibold tracking-[-0.025em]">{totalViews.toLocaleString()}</div>
           </CardContent>
         </Card>
         <Card>
@@ -100,7 +100,7 @@ export default async function BrandCampaignDetailPage({
             <CardTitle className="text-xs text-muted-foreground">Effective CPM</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${effectiveCpm}</div>
+            <div className="text-2xl font-semibold tracking-[-0.025em]">${effectiveCpm}</div>
           </CardContent>
         </Card>
       </div>
