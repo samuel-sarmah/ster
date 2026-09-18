@@ -36,7 +36,7 @@ export default async function PublicCampaignPage({
     return (
       <main className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="text-center space-y-4 max-w-sm">
-          <h1 className="text-2xl font-bold">Campaign not available</h1>
+          <h1 className="text-2xl font-semibold tracking-[-0.025em]">Campaign not available</h1>
           <p className="text-muted-foreground text-sm">
             This campaign may have ended or isn&apos;t active yet. Sign up to
             browse and apply for real campaigns.
@@ -87,7 +87,7 @@ export default async function PublicCampaignPage({
       <div className="mx-auto max-w-2xl px-4 py-12 space-y-8">
         <div>
           <p className="text-sm text-muted-foreground mb-1">{brandName}</p>
-          <h1 className="text-3xl font-black">{campaign.title}</h1>
+          <h1 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.025em]">{campaign.title}</h1>
           <div className="flex flex-wrap gap-2 mt-3">
             {(campaign.platforms as string[]).map((p) => (
               <Badge key={p} variant="outline" className="capitalize">
@@ -105,7 +105,7 @@ export default async function PublicCampaignPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-semibold tracking-[-0.025em]">
                 ${(Number(campaign.target_cpm) * 1000).toLocaleString("en-US", {
                   maximumFractionDigits: 0,
                 })}
@@ -122,7 +122,7 @@ export default async function PublicCampaignPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-semibold tracking-[-0.025em]">
                 ${remaining.toLocaleString("en-US", { maximumFractionDigits: 0 })}
               </div>
             </CardContent>
