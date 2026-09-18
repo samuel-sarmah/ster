@@ -42,3 +42,10 @@ next-env.d.ts
 
 # bigquery export staging files
 /exports/
+
+# agent tooling — skills, plans, and scratch docs stay local
+.agents/
+.claude/
+skills-lock.json
+mvp-plan.txt
+/docs/
