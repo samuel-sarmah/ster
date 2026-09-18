@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Progress } from "@/components/ui/progress";
+import { PageHeader } from "@/components/app/page-header";
+import { EmptyState } from "@/components/app/empty-state";
 
 const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   draft: "outline",
@@ -23,21 +25,23 @@ export default async function BrandCampaignsPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Campaigns</h1>
-        <Link href="/brand/campaigns/new" className={buttonVariants()}>
-          New campaign
-        </Link>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        title="Campaigns"
+        description="Every brief you've funded, with escrow released so far."
+        action={
+          <Link href="/brand/campaigns/new" className={buttonVariants()}>
+            New campaign
+          </Link>
+        }
+      />
 
       {(campaigns ?? []).length === 0 && (
-        <div className="text-muted-foreground text-sm py-8 text-center border rounded-lg">
-          No campaigns yet.{" "}
-          <Link href="/brand/campaigns/new" className="underline">
-            Create your first
+        <EmptyState title="No campaigns yet">
+          <Link href="/brand/campaigns/new" className="font-semibold text-[var(--accent-deep)] hover:underline">
+            Fund your first campaign
           </Link>
-        </div>
+        </EmptyState>
       )}
 
       <div className="space-y-3">
@@ -49,17 +53,17 @@ export default async function BrandCampaignsPage() {
             <Link
               key={campaign.id}
               href={`/brand/campaigns/${campaign.id}`}
-              className="block border rounded-lg p-4 hover:bg-muted/20 transition-colors"
+              className="block rounded-[10px] border border-border bg-card p-4 shadow-[var(--shadow-card)] transition-colors hover:bg-[var(--surface)]"
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="font-medium">{campaign.title}</div>
-                <Badge variant={STATUS_VARIANT[campaign.status] ?? "outline"}>
+              <div className="mb-2 flex items-center justify-between">
+                <div className="font-semibold">{campaign.title}</div>
+                <Badge variant={STATUS_VARIANT[campaign.status] ?? "outline"} className="capitalize">
                   {campaign.status}
                 </Badge>
               </div>
               <div className="flex items-center gap-3">
-                <Progress value={pct} className="flex-1 h-2" />
-                <span className="text-sm text-muted-foreground whitespace-nowrap">
+                <Progress value={pct} className="flex-1" />
+                <span className="whitespace-nowrap text-sm tabular-nums text-muted-foreground">
                   ${Number(campaign.spent_budget).toFixed(2)} / ${Number(campaign.total_budget).toLocaleString()}
                 </span>
               </div>
