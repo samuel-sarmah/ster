@@ -1,9 +1,9 @@
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sterz">
   <defs>
     <linearGradient id="sterzTile" x1="6" y1="3" x2="34" y2="37" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#FF9D4D"/>
-      <stop offset="0.55" stop-color="#F0701E"/>
-      <stop offset="1" stop-color="#C8430F"/>
+      <stop offset="0" stop-color="#7ee07c"/>
+      <stop offset="0.55" stop-color="#4cc74a"/>
+      <stop offset="1" stop-color="#15803d"/>
     </linearGradient>
     <linearGradient id="sterzSheen" x1="8" y1="5" x2="20" y2="22" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
