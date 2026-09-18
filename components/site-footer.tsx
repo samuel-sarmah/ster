@@ -2,7 +2,7 @@
 
 import { Footer7 } from "@/components/footer7";
 
-const TwitterIcon = ({ className }: { className?: string }) => (
+const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.745l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
@@ -21,41 +21,47 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 export function SiteFooter() {
   return (
     <Footer7
-      className=""
       logo={{
         url: "/",
         src: "/logo.svg",
         alt: "Sterz",
         title: "Sterz",
       }}
-      description="Sterz helps brands and creators run escrow-backed campaigns with transparent performance verification and automated payouts."
+      description="Creator campaigns, paid on proof."
+      ctas={[
+        { name: "Start earning", href: "/signup" },
+        { name: "Fund a campaign", href: "/signup?role=brand" },
+      ]}
       sections={[
         {
-          title: "Platform",
+          title: "Product",
           links: [
+            { name: "Features", href: "/#features" },
             { name: "How it works", href: "/#how-it-works" },
-            { name: "Browse campaigns", href: "/#marketplace" },
-            { name: "Testimonials", href: "/#testimonials" },
+            { name: "Campaigns", href: "/#marketplace" },
           ],
         },
         {
-          title: "Account",
+          title: "Creators",
           links: [
-            { name: "For creators", href: "/signup" },
-            { name: "For brands", href: "/signup?role=brand" },
+            { name: "Start earning", href: "/signup" },
+            { name: "Sign in", href: "/login" },
+          ],
+        },
+        {
+          title: "Brands",
+          links: [
+            { name: "Fund a campaign", href: "/signup?role=brand" },
             { name: "Sign in", href: "/login" },
           ],
         },
         {
           title: "Company",
-          links: [
-            { name: "Home", href: "/" },
-            { name: "Terms", href: "/terms" },
-          ],
+          links: [{ name: "Terms", href: "/terms" }],
         },
       ]}
       socialLinks={[
-        { icon: <TwitterIcon className="size-5" />, href: "https://x.com", label: "X" },
+        { icon: <XIcon className="size-5" />, href: "https://x.com", label: "X" },
         { icon: <LinkedinIcon className="size-5" />, href: "https://www.linkedin.com", label: "LinkedIn" },
         { icon: <InstagramIcon className="size-5" />, href: "https://www.instagram.com", label: "Instagram" },
       ]}

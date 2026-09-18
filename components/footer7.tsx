@@ -1,5 +1,6 @@
 "use client"
 
+import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TwitterIcon = ({ className }: { className?: string }) => (
@@ -51,6 +52,8 @@ interface FooterLogo {
 interface FooterBasicProps {
   logo?: FooterLogo;
   description?: string;
+  /** Primary actions shown under the tagline, e.g. "Get started ›". */
+  ctas?: FooterLink[];
   sections?: FooterSection[];
   socialLinks?: FooterSocialLink[];
   copyright?: string;
@@ -132,6 +135,7 @@ const Footer7 = (props: Props) => {
     logo,
     sections,
     description,
+    ctas,
     socialLinks,
     copyright,
     legalLinks,
@@ -142,23 +146,39 @@ const Footer7 = (props: Props) => {
   };
 
   return (
-    <section className={cn("border-t border-border bg-muted/30 py-14 md:py-18 lg:py-22", className)}>
-      <div className="container mx-auto">
-        <div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
+    <section className={cn("border-t border-border bg-muted/40 py-16 lg:py-20", className)}>
+      <div className="mx-auto w-full max-w-[1280px] px-6 lg:px-8">
+        <div className="flex w-full flex-col justify-between gap-12 lg:flex-row lg:items-start lg:text-left">
           <div className="flex w-full flex-col justify-between gap-6 lg:items-start">
             <div className="flex items-center gap-2 lg:justify-start">
-              <a href={logo?.url}>
+              <a href={logo?.url} className="flex items-center gap-2">
                 <img
                   src={logo?.src}
                   alt={logo?.alt}
                   title={logo?.title}
                   className="h-7"
                 />
+                <span className="text-lg font-bold tracking-tight text-foreground">{logo?.title}</span>
               </a>
             </div>
             <p className="max-w-[70%] text-sm text-muted-foreground">
               {description}
             </p>
+            {ctas && ctas.length > 0 && (
+              <ul className="flex flex-wrap items-center gap-5">
+                {ctas.map((cta) => (
+                  <li key={cta.name}>
+                    <a
+                      href={cta.href}
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-foreground transition-colors hover:text-accent"
+                    >
+                      {cta.name}
+                      <ChevronRight className="size-4" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
             <ul className="flex items-center space-x-5 text-muted-foreground">
               {socialLinks?.map((social, idx) => (
                 <li key={idx} className="font-medium">
@@ -169,15 +189,15 @@ const Footer7 = (props: Props) => {
               ))}
             </ul>
           </div>
-          <div className="grid w-full gap-8 md:grid-cols-3 lg:gap-16">
-            {sections?.slice(0, 3).map((section, sectionIdx) => (
+          <div className="grid w-full gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+            {sections?.slice(0, 4).map((section, sectionIdx) => (
               <div key={sectionIdx}>
-                <h3 className="mb-4 text-sm font-bold tracking-tight text-foreground">
+                <h3 className="mb-4 text-sm font-semibold tracking-tight text-foreground">
                   {section.title}
                 </h3>
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   {section.links.map((link, linkIdx) => (
-                    <li key={linkIdx} className="font-semibold">
+                    <li key={linkIdx} className="font-medium">
                       <a href={link.href} className="transition-colors duration-200 hover:text-accent">{link.name}</a>
                     </li>
                   ))}
@@ -186,7 +206,7 @@ const Footer7 = (props: Props) => {
             ))}
           </div>
         </div>
-        <div className="mt-10 flex flex-col justify-between gap-4 border-t border-border py-8 text-xs font-semibold text-muted-foreground md:flex-row md:items-center md:text-left">
+        <div className="mt-12 flex flex-col justify-between gap-4 border-t border-border pt-8 text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-left">
           <p className="order-2 lg:order-1">{copyright}</p>
           <ul className="order-1 flex flex-col gap-2 md:order-2 md:flex-row">
             {legalLinks?.map((link, idx) => (
