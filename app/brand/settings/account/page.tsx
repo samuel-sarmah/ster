@@ -16,7 +16,7 @@ export default async function BrandAccountSettingsPage() {
 
   return (
     <div className="max-w-lg space-y-8">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <h1 className="text-2xl font-semibold tracking-[-0.025em]">Settings</h1>
 
       <ProfileSection
         initialDisplayName={profile?.display_name ?? ""}

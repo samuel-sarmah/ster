@@ -230,7 +230,7 @@ export function CampaignDetailDialog({
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-lg border p-3">
             <p className="text-xs text-muted-foreground">Pay rate</p>
-            <p className="text-lg font-bold">
+            <p className="text-lg font-semibold tabular-nums">
               {formatRate(campaign.target_cpm)}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
                 / 1M views
@@ -239,7 +239,7 @@ export function CampaignDetailDialog({
           </div>
           <div className="rounded-lg border p-3">
             <p className="text-xs text-muted-foreground">Budget remaining</p>
-            <p className="text-lg font-bold">{formatMoney(remaining)}</p>
+            <p className="text-lg font-semibold tabular-nums">{formatMoney(remaining)}</p>
           </div>
         </div>
 

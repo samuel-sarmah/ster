@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/components/app/page-header";
+import { StatCard } from "@/components/app/stat-card";
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
@@ -23,25 +24,18 @@ export default async function AdminDashboardPage() {
   ]);
 
   const stats = [
-    { label: "Total users", value: totalUsers ?? 0 },
-    { label: "Total campaigns", value: totalCampaigns ?? 0 },
-    { label: "Pending review", value: pendingSubmissions ?? 0 },
-    { label: "Open flags", value: openFlags ?? 0 },
+    { label: "Users", value: totalUsers ?? 0 },
+    { label: "Campaigns", value: totalCampaigns ?? 0 },
+    { label: "Pending review", value: pendingSubmissions ?? 0, hot: (pendingSubmissions ?? 0) > 0 },
+    { label: "Open flags", value: openFlags ?? 0, hot: (openFlags ?? 0) > 0 },
   ];
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
-      <h1 className="text-2xl font-bold">Admin dashboard</h1>
+    <div className="space-y-8">
+      <PageHeader title="Admin" description="Platform-wide counts and review queue." />
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {stats.map(({ label, value }) => (
-          <Card key={label}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{value}</div>
-            </CardContent>
-          </Card>
+        {stats.map(({ label, value, hot }) => (
+          <StatCard key={label} label={label} value={value} hot={hot} />
         ))}
       </div>
     </div>

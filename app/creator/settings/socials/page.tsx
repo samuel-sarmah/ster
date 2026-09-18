@@ -33,7 +33,7 @@ export default async function SocialsPage({
 
   return (
     <div className="max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">Linked social accounts</h1>
+      <h1 className="text-2xl font-semibold tracking-[-0.025em]">Linked social accounts</h1>
 
       {connected && (
         <div className="rounded-lg bg-green-50 border border-green-200 p-3 text-sm text-green-800">

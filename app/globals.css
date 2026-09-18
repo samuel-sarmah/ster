@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-jakarta);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-inter);
+  --font-heading: var(--font-jakarta);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,108 +48,108 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * One visual system for the whole product: white ground, near-black type,
+ * a single green accent, hairline borders, 8px radius, Plus Jakarta Sans.
+ * The marketing homepage and the authenticated dashboards share these
+ * tokens, so a card on /brand/dashboard looks like a card on /.
+ */
 :root {
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.05 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.05 0 0);
-  --primary: oklch(0.05 0 0);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.92 0.005 30);
-  --secondary-foreground: oklch(0.05 0 0);
-  --muted: oklch(0.92 0.005 30);
-  --muted-foreground: oklch(0.55 0.005 30);
-  --accent: oklch(0.55 0.15 40);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.85 0.005 30);
-  --input: oklch(0.85 0.005 30);
-  --ring: oklch(0.05 0 0);
-  --chart-1: oklch(0.55 0.15 40);
-  --chart-2: oklch(0.4 0.02 30);
-  --chart-3: oklch(0.65 0.01 30);
-  --chart-4: oklch(0.72 0.01 30);
-  --chart-5: oklch(0.82 0.005 30);
-  --radius: 0;
-  --sidebar: oklch(0.97 0.003 30);
-  --sidebar-foreground: oklch(0.05 0 0);
-  --sidebar-primary: oklch(0.05 0 0);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.92 0.005 30);
-  --sidebar-accent-foreground: oklch(0.05 0 0);
-  --sidebar-border: oklch(0.85 0.005 30);
-  --sidebar-ring: oklch(0.05 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.05 0 0);
-  --accent-light: oklch(0.85 0.08 40);
-  --brand-gradient-start: oklch(0.05 0 0);
-  --brand-gradient-end: oklch(0.25 0.01 30);
-  --shadow-soft: 0 4px 20px -2px oklch(0 0 0 / 0.08);
-  --shadow-soft-hover: 0 10px 25px -5px oklch(0 0 0 / 0.12), 0 4px 10px -6px oklch(0 0 0 / 0.06);
-  --shadow-button: 0 4px 14px 0 oklch(0 0 0 / 0.14);
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #4cc74a;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #4cc74a;
+  --accent-foreground: #ffffff;
+  --accent-deep: #15803d;
+  --accent-soft: rgba(76, 199, 74, 0.1);
+  --surface: #f9fafb;
+  --destructive: #e11e1e;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #4cc74a;
+  --chart-1: #4cc74a;
+  --chart-2: #17a6e8;
+  --chart-3: #ffac00;
+  --chart-4: #737373;
+  --chart-5: #d4d4d4;
+  --radius: 0.5rem;
+  --sidebar: #f9fafb;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #4cc74a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f5f5f5;
+  --sidebar-accent-foreground: #0a0a0a;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #4cc74a;
+  --shadow-card: 0 1px 3px rgba(10, 10, 10, 0.04);
+  --shadow-soft: 0 1px 3px rgba(10, 10, 10, 0.04);
+  --shadow-soft-hover: 0 4px 12px rgba(10, 10, 10, 0.06);
 }
 
 .dark {
-  --background: oklch(0.05 0 0);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.12 0.003 30);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.12 0.003 30);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.98 0 0);
-  --primary-foreground: oklch(0.05 0 0);
-  --secondary: oklch(0.2 0.005 30);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.18 0.005 30);
-  --muted-foreground: oklch(0.65 0.005 30);
-  --accent: oklch(0.55 0.15 40);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.25 0.005 30);
-  --input: oklch(0.25 0.005 30);
-  --ring: oklch(0.98 0 0);
-  --chart-1: oklch(0.55 0.15 40);
-  --chart-2: oklch(0.65 0.01 30);
-  --chart-3: oklch(0.55 0.01 30);
-  --chart-4: oklch(0.45 0.01 30);
-  --chart-5: oklch(0.35 0.01 30);
-  --sidebar: oklch(0.12 0.003 30);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.98 0 0);
-  --sidebar-primary-foreground: oklch(0.05 0 0);
-  --sidebar-accent: oklch(0.2 0.005 30);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.25 0.005 30);
-  --sidebar-ring: oklch(0.98 0 0);
-  --brand-gradient-start: oklch(0.98 0 0);
-  --brand-gradient-end: oklch(0.72 0.01 30);
-  --shadow-soft: 0 4px 20px -2px oklch(0 0 0 / 0.40);
-  --shadow-soft-hover: 0 10px 25px -5px oklch(0 0 0 / 0.50), 0 4px 10px -6px oklch(0 0 0 / 0.30);
-  --shadow-button: 0 4px 14px 0 oklch(0 0 0 / 0.40);
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #141414;
+  --card-foreground: #fafafa;
+  --popover: #141414;
+  --popover-foreground: #fafafa;
+  --primary: #4cc74a;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #fafafa;
+  --muted: #1f1f1f;
+  --muted-foreground: #a3a3a3;
+  --accent: #4cc74a;
+  --accent-foreground: #0a0a0a;
+  --accent-deep: #86efac;
+  --accent-soft: rgba(76, 199, 74, 0.16);
+  --surface: #111111;
+  --destructive: #f87171;
+  --border: #262626;
+  --input: #262626;
+  --ring: #4cc74a;
+  --sidebar: #111111;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #4cc74a;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #1f1f1f;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #262626;
+  --sidebar-ring: #4cc74a;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-soft-hover: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  /* Project-wide: no rounded corners on anything (cards, buttons, inputs,
-     badges, avatars…). !important so it also overrides utility classes like
-     `rounded-lg` / `rounded-full` baked into components. */
-  *,
-  *::before,
-  *::after {
-    border-radius: 0 !important;
+  html {
+    @apply font-sans;
   }
   body {
     @apply bg-background text-foreground;
   }
-  html {
-    @apply font-sans;
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+    font-weight: 600;
+    letter-spacing: -0.025em;
   }
-  /* iOS Safari adds a ~300ms tap delay (waiting for a double-tap-to-zoom) on
-     interactive elements, which makes taps on a real iPhone feel unresponsive
-     even though desktop-inspector clicks fire instantly. `manipulation` opts
-     out of that delay while keeping pinch-zoom, and we drop the grey tap flash. */
+  /* iOS Safari adds a ~300ms tap delay on interactive elements. `manipulation`
+     opts out while keeping pinch-zoom, and we drop the grey tap flash. */
   button,
   a,
   label,
@@ -158,48 +158,12 @@
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
-  .container {
-    padding-inline: 1rem;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-heading;
-    letter-spacing: -0.03em;
-  }
-
-  h1, h2 {
-    font-weight: 900;
-  }
-
-  h3, h4 {
-    font-weight: 700;
-  }
-}
-
-@media (min-width: 640px) {
-  .container {
-    padding-inline: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding-inline: 2rem;
-  }
-}
-
-@keyframes scroll-up {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-50%); }
 }
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -207,130 +171,38 @@
   }
 }
 
-@keyframes soft-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-@keyframes sweep {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 @layer utilities {
-  .section-padding {
-    @apply py-14 sm:py-18 lg:py-22;
-  }
-
-  .brand-gradient {
-    background-image: linear-gradient(135deg, var(--brand-gradient-start), var(--brand-gradient-end));
-  }
-
-  .brand-gradient-text {
-    background-image: linear-gradient(135deg, var(--brand-gradient-start), var(--brand-gradient-end));
-    @apply bg-clip-text text-transparent;
-  }
-
-  .surface-card {
-    background: color-mix(in oklab, var(--card), transparent 0%);
-    border: 1px solid color-mix(in oklab, var(--border), transparent 0%);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .surface-card:hover {
-    box-shadow: var(--shadow-soft-hover);
-  }
-
   .animate-fade-up {
-    animation: fade-up 0.7s ease-out both;
+    animation: fade-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  .animate-soft-float {
-    animation: soft-float 5s ease-in-out infinite;
+  /* Faint dot field used behind UI mocks. */
+  .dot-grid {
+    background-image: radial-gradient(circle, var(--border) 1.1px, transparent 1.2px);
+    background-size: 14px 14px;
   }
 
-  .animate-sweep {
-    background-size: 200% 200%;
-    animation: sweep 8s ease infinite;
+  /*
+   * Staggered reveal for card grids. Children carry `--i` (their index) and
+   * stay invisible until the container gets `is-visible`, then fade up in
+   * sequence. Only opacity and transform animate, so the work stays on the
+   * compositor; the delay is capped so a long grid never feels slow.
+   */
+  .reveal-grid > * {
+    opacity: 0;
   }
-
-  .animation-delay-100 {
-    animation-delay: 0.1s;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-  }
-
-  .animation-delay-300 {
-    animation-delay: 0.3s;
-  }
-
-  .section-dark {
-    background-color: oklch(0.05 0 0);
-    color: oklch(0.98 0 0);
-  }
-
-  .section-dark .text-muted-foreground {
-    color: oklch(0.65 0.005 30);
-  }
-
-  .section-dark .border-border\/60 {
-    border-color: oklch(0.25 0.005 30 / 0.6);
-  }
-
-  .badge-accent {
-    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em];
-    background-color: oklch(0.55 0.15 40);
-    color: oklch(1 0 0);
-  }
-
-  .badge-dark {
-    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em];
-    background-color: oklch(0.05 0 0);
-    color: oklch(1 0 0);
-  }
-
-  .section-label {
-    @apply text-[10px] font-bold uppercase tracking-[0.12em];
-  }
-
-  .animate-scroll-up {
-    animation: scroll-up var(--scroll-duration, 25s) linear infinite;
-  }
-
-  .animate-marquee {
-    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  .reveal-grid.is-visible > * {
+    animation: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(min(var(--i, 0), 11) * 45ms);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
-  .animate-soft-float,
-  .animate-sweep,
-  .animate-scroll-up,
-  .animate-marquee {
+  .reveal-grid.is-visible > * {
     animation: none;
+  }
+  .reveal-grid > * {
+    opacity: 1;
   }
 }

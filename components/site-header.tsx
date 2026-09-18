@@ -1,4 +1,4 @@
-import { CircleHelp, Handshake, LayoutGrid, ShieldCheck } from "lucide-react";
+import { BadgeCheck, LayoutGrid, Lock, Route } from "lucide-react";
 import { Navbar1 } from "@/components/navbar1";
 import { getSessionRole } from "@/lib/auth/get-session-role";
 
@@ -14,7 +14,7 @@ export async function SiteHeader() {
     <Navbar1
       isLoggedIn={!!user}
       dashboardUrl={dashboardUrl}
-      className="sticky top-0 z-30 border-b border-border/80 bg-background py-3"
+      className="sticky top-0 z-30 border-b border-border bg-background/85 py-3 backdrop-blur-md"
       logo={{
         url: "/",
         src: "/logo.svg",
@@ -22,43 +22,39 @@ export async function SiteHeader() {
         title: "Sterz",
       }}
       menu={[
-        { title: "Home", url: "/" },
         {
-          title: "Platform",
-          url: "/#marketplace",
+          title: "Product",
+          url: "/#features",
           items: [
             {
-              title: "Browse Campaigns",
-              description: "Explore active brand campaigns sorted by payout rate.",
+              title: "Verified views",
+              description: "Counts read from each platform's API.",
+              icon: <BadgeCheck className="size-5 shrink-0" />,
+              url: "/#features",
+            },
+            {
+              title: "Escrow & payouts",
+              description: "Budgets locked up front, paid weekly via Stripe.",
+              icon: <Lock className="size-5 shrink-0" />,
+              url: "/#features",
+            },
+            {
+              title: "How it works",
+              description: "Fund, post, verify, pay.",
+              icon: <Route className="size-5 shrink-0" />,
+              url: "/#how-it-works",
+            },
+            {
+              title: "Campaigns",
+              description: "Funded briefs, sorted by rate.",
               icon: <LayoutGrid className="size-5 shrink-0" />,
               url: "/#marketplace",
             },
-            {
-              title: "How It Works",
-              description: "Escrow funding, creator submissions, and verified payouts in one flow.",
-              icon: <Handshake className="size-5 shrink-0" />,
-              url: "/#how-it-works",
-            },
-            {
-              title: "Verified Payouts",
-              description: "View counts are validated via social platform APIs before payouts release.",
-              icon: <ShieldCheck className="size-5 shrink-0" />,
-              url: "/#how-it-works",
-            },
           ],
         },
-        {
-          title: "Company",
-          url: "/#testimonials",
-          items: [
-            {
-              title: "Testimonials",
-              description: "See how brands and creators are scaling with Sterz.",
-              icon: <CircleHelp className="size-5 shrink-0" />,
-              url: "/#testimonials",
-            },
-          ],
-        },
+        { title: "Creators", url: "/signup" },
+        { title: "Brands", url: "/signup?role=brand" },
+        { title: "Campaigns", url: "/#marketplace" },
       ]}
       auth={{
         login: { title: "Sign in", url: "/login" },

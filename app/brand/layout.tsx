@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { AppShell } from "@/components/app/app-shell";
 
 const NAV = [
   { href: "/brand/dashboard", label: "Dashboard" },
@@ -30,32 +30,8 @@ export default async function BrandLayout({ children }: { children: React.ReactN
   if (profile?.role !== "brand") redirect("/login");
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b px-4 py-3 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4 sm:gap-6">
-            <Link href="/" className="font-semibold tracking-tight hover:text-primary transition-colors">
-              Sterz
-            </Link>
-            <nav className="flex flex-wrap gap-3 sm:gap-4">
-              {NAV.map(({ href, label }) => (
-                <Link key={href} href={href} className="text-sm hover:underline">
-                  {label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{profile?.display_name}</span>
-            <form action={signOut}>
-              <button type="submit" className="text-sm text-muted-foreground underline hover:text-foreground">
-                Log out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-      <main className="flex-1 p-4 sm:p-8">{children}</main>
-    </div>
+    <AppShell nav={NAV} displayName={profile?.display_name} signOut={signOut}>
+      {children}
+    </AppShell>
   );
 }

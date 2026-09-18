@@ -28,7 +28,7 @@ export default async function CreatorSubmissionsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My submissions</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.025em]">My submissions</h1>
         <Link href="/creator/submissions/new" className={buttonVariants()}>
           New submission
         </Link>

@@ -14,7 +14,7 @@ export default function AdminAnalyticsPage() {
     <AnalyticsReportsProvider>
       <div className="mx-auto max-w-7xl space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Analytics</h1>
+          <h1 className="text-2xl font-semibold tracking-[-0.025em]">Analytics</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Aggregate metrics computed in the BigQuery warehouse.
           </p>

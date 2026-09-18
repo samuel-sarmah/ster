@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
+import { Book, ChevronRight, Menu, Sunset, Trees, Zap } from "lucide-react";
 
 import {
   Accordion,
@@ -50,6 +50,11 @@ interface Navbar1Props {
       url: string;
     };
     signup: {
+      title: string;
+      url: string;
+    };
+    /** Plain text link shown before the auth buttons on desktop. */
+    secondary?: {
       title: string;
       url: string;
     };
@@ -147,7 +152,7 @@ const Navbar1 = ({
 }: Navbar1Props) => {
   return (
     <section className={cn("py-3", className)}>
-      <div className="w-4/5 mx-auto">
+      <div className="mx-auto w-full max-w-[1280px] px-6 lg:px-8">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-8">
@@ -158,7 +163,7 @@ const Navbar1 = ({
                 className="max-h-7"
                 alt={logo.alt}
               />
-              <span className="text-base font-black tracking-tight">
+              <span className="text-lg font-bold tracking-tight">
                 {logo.title}
               </span>
             </a>
@@ -170,13 +175,27 @@ const Navbar1 = ({
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
+            {auth.secondary && (
+              <a
+                href={auth.secondary.url}
+                className="mr-1 px-1 text-[13px] font-semibold text-foreground transition-colors hover:text-muted-foreground"
+              >
+                {auth.secondary.title}
+              </a>
+            )}
             {isLoggedIn ? (
-              <Button size="sm" className="rounded-lg font-bold text-xs" render={<a href={dashboardUrl} />} nativeButton={false}>Dashboard</Button>
+              <Button size="sm" className="h-8 rounded-md px-3 text-[13px] font-semibold" render={<a href={dashboardUrl} />} nativeButton={false}>
+                Dashboard
+                <ChevronRight className="size-4" />
+              </Button>
             ) : (
               <>
-                <Button variant="outline" size="sm" className="rounded-lg font-bold text-xs" render={<a href={auth.login.url} />} nativeButton={false}>{auth.login.title}</Button>
-                <Button size="sm" className="rounded-lg font-bold text-xs" render={<a href={auth.signup.url} />} nativeButton={false}>{auth.signup.title}</Button>
+                <Button variant="outline" size="sm" className="h-8 rounded-md border-0 px-3 text-[13px] font-semibold shadow-[0_0_0_1px_var(--border)] hover:bg-muted" render={<a href={auth.login.url} />} nativeButton={false}>{auth.login.title}</Button>
+                <Button size="sm" className="h-8 rounded-md px-3 text-[13px] font-semibold hover:brightness-105" render={<a href={auth.signup.url} />} nativeButton={false}>
+                  {auth.signup.title}
+                  <ChevronRight className="size-4" />
+                </Button>
               </>
             )}
           </div>
@@ -238,7 +257,7 @@ const renderMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
       <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger className="text-sm font-bold">{item.title}</NavigationMenuTrigger>
+        <NavigationMenuTrigger className="text-[13px] font-semibold">{item.title}</NavigationMenuTrigger>
         <NavigationMenuContent className="bg-popover text-popover-foreground">
           {item.items.map((subItem) => (
             <NavigationMenuLink key={subItem.title} className="w-80" render={<SubMenuLink item={subItem} />}></NavigationMenuLink>
@@ -252,7 +271,7 @@ const renderMenuItem = (item: MenuItem) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-bold transition-colors duration-200 hover:text-accent"
+        className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-3 py-2 text-[13px] font-semibold transition-colors duration-200 hover:text-muted-foreground"
       >
         {item.title}
       </NavigationMenuLink>
@@ -291,7 +310,7 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => {
     >
       <div className="text-foreground">{item.icon}</div>
       <div>
-        <div className="text-sm font-bold">{item.title}</div>
+        <div className="text-sm font-semibold">{item.title}</div>
         {item.description && (
           <p className="text-sm leading-snug text-muted-foreground">
             {item.description}

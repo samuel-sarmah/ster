@@ -1,198 +1,165 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { BadgeCheck, Banknote, Check, ChevronRight, Lock } from "lucide-react";
 import { TikTokIcon, InstagramIcon, YouTubeIcon, XIcon } from "@/components/brand-icons";
+import { cn } from "@/lib/utils";
 import { prefersReducedMotion } from "./use-count-up";
+import { AreaChart } from "./chart";
+import { Container, MockCard, btnPrimary, btnSecondary } from "./section";
 
 const CPM = 4; // $4 per 1,000 views — drives the live math
+const ESCROW = 20_000;
 
 const fmtInt = (n: number) => Math.floor(n).toLocaleString("en-US");
 const fmtMoney = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
 
+const PLATFORMS = [
+  { label: "TikTok", Icon: TikTokIcon, done: true },
+  { label: "Instagram", Icon: InstagramIcon, done: true },
+  { label: "YouTube", Icon: YouTubeIcon, done: true },
+  { label: "X", Icon: XIcon, done: false },
+];
+
+const EARNINGS_SERIES = [4, 6, 9, 11, 15, 18, 21, 27, 30, 36, 41, 45, 52, 58, 64, 73];
+
 /**
- * The soul of the page: a payout statement that is visibly *alive*. Views tick
- * up, and dollars accrue in lockstep at the CPM rate — the whole product promise
- * ("views become verified income") happening in front of you.
+ * Three overlapping product tiles. The views figure ticks up and the escrow
+ * bar fills in lockstep at the CPM — the product promise, happening live.
  */
-function LiveStatement() {
+function HeroCards() {
   const [views, setViews] = useState(3_812_400);
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const id = setInterval(() => {
-      // a believable, slightly jittery trickle of new verified views
       setViews((v) => v + Math.floor(180 + Math.random() * 900));
     }, 140);
     return () => clearInterval(id);
   }, []);
 
   const earnings = (views / 1000) * CPM;
-  const budget = 20_000;
-  const released = Math.min(100, (earnings / budget) * 100);
+  const released = Math.min(100, (earnings / ESCROW) * 100);
 
   return (
-    <div className="relative w-full max-w-md">
-      {/* accent glow behind the statement */}
-      <div
-        aria-hidden
-        className="absolute -inset-6 -z-10 bg-accent/15 blur-3xl"
-        style={{ maskImage: "radial-gradient(closest-side, black, transparent)" }}
-      />
-
-      <div className="border border-border bg-card shadow-[0_30px_70px_-25px_rgba(40,20,10,0.35)]">
-        {/* statement header */}
-        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-          <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
-            Payout statement
+    <div className="relative mx-auto flex w-full max-w-[540px] flex-col gap-3 sm:block sm:h-[372px]">
+      {/* verified views */}
+      <MockCard className="w-full sm:absolute sm:right-8 sm:top-0 sm:w-[268px]">
+        <div className="flex items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[var(--accent-soft)] text-accent">
+            <BadgeCheck className="size-5" />
           </span>
-          <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
-            <span className="relative flex size-1.5">
-              <span className="absolute inline-flex size-full animate-ping bg-accent opacity-75" />
-              <span className="relative inline-flex size-1.5 bg-accent" />
-            </span>
-            Live
-          </span>
-        </div>
-
-        {/* the two numbers that move together */}
-        <div className="grid grid-cols-2 divide-x divide-border border-b border-border">
-          <div className="px-5 py-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-              Verified views
-            </p>
-            <p className="mt-1 font-mono text-2xl font-bold tabular-nums text-foreground">
+          <div className="min-w-0">
+            <p className="text-2xl font-semibold leading-none tabular-nums text-foreground">
               {fmtInt(views)}
             </p>
-          </div>
-          <div className="px-5 py-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-              Earned so far
-            </p>
-            <p className="mt-1 font-mono text-2xl font-bold tabular-nums text-accent">
-              {fmtMoney(earnings)}
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">verified views</p>
           </div>
         </div>
-
-        {/* budget release meter */}
-        <div className="border-b border-border px-5 py-4">
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-            <span className="font-mono">${CPM.toFixed(2)} / 1,000 views</span>
-            <span className="font-mono">{released.toFixed(1)}% of escrow released</span>
-          </div>
-          <div className="mt-2 h-1.5 w-full overflow-hidden bg-muted">
-            <div
-              className="h-full bg-accent transition-[width] duration-200 ease-out"
-              style={{ width: `${released}%` }}
-            />
-          </div>
-        </div>
-
-        {/* ledger line items */}
-        <div className="divide-y divide-border">
-          {[
-            { icon: <TikTokIcon className="size-3.5 text-foreground" />, handle: "@maya.makes", v: "1.2M", amt: "+$4,800.00" },
-            { icon: <YouTubeIcon className="size-3.5 text-[#FF0000]" />, handle: "@deshawn", v: "740K", amt: "+$2,960.00" },
-            { icon: <InstagramIcon className="size-3.5 text-[#E4405F]" />, handle: "@lena.co", v: "512K", amt: "+$2,048.00" },
-          ].map((row) => (
-            <div key={row.handle} className="flex items-center gap-3 px-5 py-2.5">
-              <span className="flex size-6 items-center justify-center border border-border bg-muted">
-                {row.icon}
+        <div className="mt-3 flex items-center justify-between rounded-lg bg-[var(--surface)] px-3 py-2">
+          {PLATFORMS.map((p) => (
+            <div key={p.label} className="flex flex-col items-center gap-1.5">
+              <span
+                className={cn(
+                  "flex size-7 items-center justify-center rounded-full",
+                  p.done ? "bg-accent text-white" : "bg-border text-muted-foreground"
+                )}
+              >
+                {p.done ? <Check className="size-3.5" strokeWidth={3} /> : <p.Icon className="size-3" />}
               </span>
-              <span className="text-xs font-semibold text-foreground">{row.handle}</span>
-              <span className="ml-auto font-mono text-[11px] text-muted-foreground">{row.v} views</span>
-              <span className="w-20 text-right font-mono text-[11px] font-semibold text-accent">
-                {row.amt}
-              </span>
+              <span className="text-[10px] font-medium text-muted-foreground">{p.label}</span>
             </div>
           ))}
         </div>
+      </MockCard>
 
-        {/* verified stamp footer */}
-        <div className="flex items-center gap-2 border-t border-border bg-muted/50 px-5 py-3">
-          <span className="flex size-4 items-center justify-center bg-accent text-white">
-            <Check className="size-3" strokeWidth={3} />
+      {/* escrow release */}
+      <MockCard className="w-full sm:absolute sm:left-0 sm:top-[136px] sm:w-[328px]">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <span className="flex size-5 items-center justify-center rounded-full bg-[#17a6e8] text-white">
+              <Lock className="size-3" />
+            </span>
+            Escrow
           </span>
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-            Verified via platform API · paid by Stripe
-          </span>
+          <span className="text-sm font-semibold text-[#17a6e8]">{released.toFixed(0)}% released</span>
         </div>
-      </div>
+        <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+          <div
+            className="h-full rounded-full bg-[#17a6e8] transition-[width] duration-200 ease-out"
+            style={{ width: `${released}%` }}
+          />
+        </div>
+        <div className="mt-1.5 flex justify-between text-[11px] text-muted-foreground">
+          <span className="tabular-nums">
+            {fmtMoney(earnings)} / {fmtMoney(ESCROW)}
+          </span>
+          <span>${CPM.toFixed(2)} CPM</span>
+        </div>
+        <div className="mt-3 flex gap-2">
+          <div className="flex flex-col justify-between py-0.5 text-[10px] text-muted-foreground">
+            <span>$20k</span>
+            <span>$10k</span>
+            <span>$0</span>
+          </div>
+          <AreaChart values={EARNINGS_SERIES} stroke="#17a6e8" height={72} width={260} className="flex-1" />
+        </div>
+      </MockCard>
+
+      {/* paid out */}
+      <MockCard className="w-full text-center sm:absolute sm:right-0 sm:top-[184px] sm:w-[160px] sm:py-5">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-accent text-white shadow-[0_6px_16px_rgba(76,199,74,0.35)]">
+          <Banknote className="size-7" />
+        </span>
+        <p className="mt-3 text-sm font-semibold text-foreground">Paid out</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">$4,000.00 · Stripe</p>
+      </MockCard>
     </div>
   );
 }
 
-const btnPrimary =
-  "group inline-flex h-12 items-center justify-center gap-2 bg-accent px-7 text-sm font-bold text-white transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px";
-const btnGhost =
-  "inline-flex h-12 items-center justify-center gap-2 border border-border px-7 text-sm font-bold text-foreground transition-colors duration-200 hover:bg-muted active:translate-y-px";
-
 export function LandingHero() {
   return (
-    <section className="relative overflow-hidden border-b border-border">
-      {/* faint ledger grid + top-down accent wash */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.5]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage: "radial-gradient(120% 80% at 50% 0%, black, transparent 75%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[36rem] w-[52rem] -translate-x-1/2 bg-[oklch(0.78_0.11_262)]/40 blur-[120px]"
-      />
-
-      <div className="container mx-auto grid items-center gap-14 py-16 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-28">
+    <section className="pb-16 pt-12 sm:pt-16 lg:pb-24 lg:pt-20">
+      <Container className="grid items-center gap-14 lg:grid-cols-[600px_1fr] lg:gap-10">
         {/* left: the pitch */}
-        <div className="max-w-xl">
-          <h1 className="text-balance text-4xl font-black leading-[1.02] tracking-[-0.035em] text-foreground sm:text-5xl lg:text-6xl">
-            Views in.
-            <br />
-            Dollars out.
-            <br />
+        <div className="max-w-[600px]">
+          <h1 className="text-[40px] font-semibold leading-[1.02] tracking-[-1.2px] text-foreground sm:text-[52px] lg:text-[60px] lg:leading-[60px] lg:tracking-[-1.5px]">
+            Creator campaigns, <span className="text-accent">paid on proof</span>
           </h1>
 
-          <p className="mt-6 max-w-md text-base leading-7 text-muted-foreground">
-            Sterz locks the budget in escrow before a single frame goes live, pulls
-            your real view counts straight from the platform&rsquo;s API, and releases
-            your cut the moment they&rsquo;re verified. 
+          <p className="mt-6 text-lg leading-7 text-muted-foreground sm:text-xl sm:leading-8">
+            Brands fund escrow. Creators post. Views are read from the platform
+            APIs and paid out weekly through Stripe.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href="/signup" className={btnPrimary}>
               Start earning
-              <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              <ChevronRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
-            <a href="/signup?role=brand" className={btnGhost}>
+            <a href="/signup?role=brand" className={btnSecondary}>
               Fund a campaign
             </a>
           </div>
 
-          {/* platform verification line */}
-          <div className="mt-9 flex items-center gap-4 border-t border-border pt-6">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-              Verified on
-            </span>
-            <div className="flex items-center gap-4 text-foreground/75">
-              <TikTokIcon className="size-4" />
-              <InstagramIcon className="size-4" />
-              <YouTubeIcon className="size-4" />
-              <XIcon className="size-4" />
-            </div>
+          <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-muted-foreground">
+            <span className="text-xs font-medium">Verified on</span>
+            <TikTokIcon className="size-4" aria-label="TikTok" />
+            <InstagramIcon className="size-4" aria-label="Instagram" />
+            <YouTubeIcon className="size-4" aria-label="YouTube" />
+            <XIcon className="size-4" aria-label="X" />
+            <span className="text-xs font-medium">· Paid through</span>
+            <span className="text-[15px] font-bold tracking-[-0.03em]">stripe</span>
           </div>
         </div>
 
-        {/* right: the living statement */}
+        {/* right: the product, live */}
         <div className="flex justify-center lg:justify-end">
-          <LiveStatement />
+          <HeroCards />
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
+import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteChrome } from "@/components/site-chrome";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
 });
 
@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sterz — Performance Creator Marketing",
-  description: "Brands deposit escrow. Creators post. Views verified. Creators get paid.",
+  title: "Sterz — Verified-view creator campaigns",
+  description: "Escrow-funded CPM campaigns. Views read from platform APIs, paid weekly through Stripe.",
   icons: { icon: "/logo.svg" },
 };
 
@@ -27,10 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${jakarta.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <SiteChrome header={<SiteHeader />} footer={<SiteFooter />}>
           {children}

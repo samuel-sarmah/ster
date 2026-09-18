@@ -13,6 +13,7 @@ export interface CampaignCardProps {
   ends_at: string | null;
   imageUrl?: string | null;
   className?: string;
+  style?: React.CSSProperties;
   /** When provided, the card opens this handler instead of navigating. */
   onSelect?: () => void;
 }
@@ -46,47 +47,51 @@ export function CampaignCard({
   brand_name,
   imageUrl,
   className,
+  style,
   onSelect,
 }: CampaignCardProps) {
   const initial = brand_name.charAt(0).toUpperCase();
   const remaining = total_budget - spent_budget;
 
-  const cardClassName = `flex flex-col overflow-hidden rounded-2xl bg-muted text-left ${className ?? ""}`;
+  const cardClassName = cn(
+    "group flex flex-col overflow-hidden rounded-[10px] border border-border bg-card text-left shadow-[var(--shadow-card)] transition-[border-color,box-shadow] duration-200 hover:border-foreground/20 hover:shadow-[var(--shadow-soft-hover)]",
+    className,
+  );
 
   const inner = (
     <>
       {imageUrl ? (
         <img
           src={imageUrl}
-          alt={title}
-          className="h-72 w-full object-cover"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="aspect-[16/10] w-full object-cover"
         />
       ) : (
-        <div className="flex h-72 items-center justify-center bg-gradient-to-br from-accent/20 to-accent/5">
-          <span className="text-5xl font-black text-accent/30">{initial}</span>
+        <div className="flex aspect-[16/10] items-center justify-center bg-[var(--surface)]">
+          <span className="text-4xl font-semibold text-accent/40">{initial}</span>
         </div>
       )}
 
       <div className="flex items-end justify-between gap-3 p-4">
         <div className="min-w-0">
-          <span className="text-sm font-bold text-foreground">
-            {brand_name}
-          </span>
-          <h3 className="truncate text-base font-black leading-tight text-foreground">
+          <span className="text-xs font-medium text-muted-foreground">{brand_name}</span>
+          <h3 className="mt-0.5 truncate text-[15px] font-semibold leading-tight text-foreground">
             {title}
           </h3>
-          <span className="mt-1 inline-block rounded-lg border border-accent/25 bg-accent/10 px-2.5 py-1 text-xs font-black text-accent">
+          <span className="mt-2 inline-block rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--accent-deep)]">
             {formatRate(target_cpm)}
           </span>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex items-center gap-1">
             {platforms.map((p) => (
               <span
                 key={p}
                 title={PLATFORM_LABELS[p] ?? p}
                 aria-label={PLATFORM_LABELS[p] ?? p}
-                className="flex size-6 items-center justify-center rounded-full border border-border/60 bg-background"
+                className="flex size-6 items-center justify-center rounded-full border border-border bg-background"
               >
                 <PlatformIcon
                   platform={p}
@@ -95,9 +100,7 @@ export function CampaignCard({
               </span>
             ))}
           </div>
-          <span className="text-xs text-muted-foreground">
-            {formatBudget(remaining)} remaining
-          </span>
+          <span className="text-xs tabular-nums text-muted-foreground">{formatBudget(remaining)} left</span>
         </div>
       </div>
     </>
@@ -105,14 +108,14 @@ export function CampaignCard({
 
   if (onSelect) {
     return (
-      <button type="button" onClick={onSelect} className={cardClassName}>
+      <button type="button" onClick={onSelect} className={cardClassName} style={style}>
         {inner}
       </button>
     );
   }
 
   return (
-    <a href={`/campaigns/${id}`} className={cardClassName}>
+    <a href={`/campaigns/${id}`} className={cardClassName} style={style}>
       {inner}
     </a>
   );

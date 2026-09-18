@@ -42,7 +42,7 @@ export default async function AdminSubmissionDetailPage({
   return (
     <div className="space-y-6 max-w-2xl">
       <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-bold">Submission review</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.025em]">Submission review</h1>
         <Badge>{s.status.replace(/_/g, " ")}</Badge>
       </div>
 

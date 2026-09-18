@@ -26,7 +26,7 @@ export default async function NewSubmissionPage() {
 
   return (
     <div className="max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">Submit a post</h1>
+      <h1 className="text-2xl font-semibold tracking-[-0.025em]">Submit a post</h1>
       <NewSubmissionForm
         approvedCampaigns={(approvedApps ?? []).map((a: any) => a.campaigns)}
         socialAccounts={socialAccounts ?? []}
