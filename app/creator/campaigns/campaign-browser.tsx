@@ -4,6 +4,9 @@ import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PlatformIcon, PLATFORM_BRAND_CLASS, type PlatformKey } from "@/components/brand-icons";
+import { PageHeader } from "@/components/app/page-header";
+import { EmptyState } from "@/components/app/empty-state";
 import { NICHES } from "@/lib/niches";
 import { cn } from "@/lib/utils";
 import { joinCampaign } from "@/app/campaigns/actions";
@@ -64,99 +67,108 @@ export function CampaignBrowser({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Active campaigns</h1>
-        {selected.length > 0 && (
-          <button
-            type="button"
-            onClick={() => setSelected([])}
-            className="text-sm text-muted-foreground underline hover:text-foreground"
-          >
-            Clear filters
-          </button>
-        )}
-      </div>
-
-      {/* Editable niche filter — pre-set to the creator's niches. */}
-      <div className="space-y-2">
-        <div className="text-sm text-muted-foreground">
-          {selected.length > 0
-            ? "Filtered to your niches — tap to edit"
-            : "Showing all campaigns — pick niches to filter"}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {NICHES.map((n) => (
+    <div className="space-y-8">
+      <PageHeader
+        title="Campaigns"
+        description={
+          selected.length > 0
+            ? "Filtered to your niches. Tap a niche to edit."
+            : "Every funded brief. Pick niches to narrow the list."
+        }
+        action={
+          selected.length > 0 ? (
             <button
-              key={n}
               type="button"
-              onClick={() => toggle(n)}
-              className={cn(
-                "rounded-full border px-3 py-1 text-sm transition-colors",
-                selected.includes(n)
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border text-muted-foreground hover:border-muted-foreground/50",
-              )}
+              onClick={() => setSelected([])}
+              className="text-[13px] font-semibold text-muted-foreground hover:text-foreground"
             >
-              {n}
+              Clear filters
             </button>
-          ))}
-        </div>
+          ) : undefined
+        }
+      />
+
+      <div className="flex flex-wrap gap-1.5">
+        {NICHES.map((n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => toggle(n)}
+            className={cn(
+              "rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors duration-150",
+              selected.includes(n)
+                ? "border-accent bg-accent text-white"
+                : "border-border bg-transparent text-muted-foreground hover:border-accent/40 hover:text-foreground",
+            )}
+          >
+            {n}
+          </button>
+        ))}
       </div>
 
       {visible.length === 0 ? (
-        <div className="text-muted-foreground text-sm py-8 text-center border rounded-lg">
+        <EmptyState title="No campaigns match">
           {campaigns.length === 0
-            ? "No active campaigns right now. Check back later."
-            : "No campaigns match your selected niches. Try adding more niches or clearing the filter."}
-        </div>
+            ? "No active campaigns right now. Check back soon."
+            : "Try adding more niches or clearing the filter."}
+        </EmptyState>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           {visible.map((campaign) => {
             const status = applied[campaign.id];
             const remaining = campaign.total_budget - campaign.spent_budget;
 
             return (
-              <div key={campaign.id} className="border rounded-lg p-5 space-y-3">
+              <div
+                key={campaign.id}
+                className="flex flex-col gap-4 rounded-[10px] border border-border bg-card p-5 shadow-[var(--shadow-card)]"
+              >
                 <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-semibold">{campaign.title}</h3>
+                  <div className="min-w-0">
+                    <h3 className="text-[15px] font-semibold">{campaign.title}</h3>
                     {campaign.description && (
-                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                         {campaign.description}
                       </p>
                     )}
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-semibold">
+                  <div className="shrink-0 text-right">
+                    <span className="inline-block rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--accent-deep)]">
                       ${campaign.target_cpm.toFixed(2)} CPM
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      ${remaining.toFixed(0)} remaining
-                    </div>
+                    </span>
+                    <p className="mt-1.5 text-xs tabular-nums text-muted-foreground">
+                      ${remaining.toLocaleString("en-US", { maximumFractionDigits: 0 })} left
+                    </p>
                   </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
                   {campaign.platforms.map((p) => (
-                    <Badge key={p} variant="outline" className="capitalize text-xs">
-                      {p}
-                    </Badge>
+                    <span
+                      key={p}
+                      title={p}
+                      className="flex size-6 items-center justify-center rounded-full border border-border bg-background"
+                    >
+                      <PlatformIcon
+                        platform={p}
+                        className={cn("size-3.5", PLATFORM_BRAND_CLASS[p as PlatformKey])}
+                      />
+                    </span>
                   ))}
                   {campaign.categories.map((c) => (
-                    <Badge key={c} variant="secondary" className="text-xs">
+                    <Badge key={c} variant="secondary">
                       {c}
                     </Badge>
                   ))}
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="mt-auto flex items-center justify-between">
                   <Link
                     href={`/creator/campaigns/${campaign.id}`}
-                    className="text-sm underline"
+                    className="text-[13px] font-semibold text-[var(--accent-deep)] hover:underline"
                   >
                     View details
                   </Link>
                   {status ? (
-                    <Badge variant={status === "approved" ? "default" : "secondary"}>
+                    <Badge variant={status === "approved" ? "default" : "secondary"} className="capitalize">
                       {status}
                     </Badge>
                   ) : (
